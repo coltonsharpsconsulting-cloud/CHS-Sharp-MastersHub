@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EL Quick-Reference Tool — Identifying & Supporting English Learners</title>
+<meta name="author" content="Colton Sharp" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#1c2433; --muted:#5b6677; --paper:#f4f6fb; --card:#ffffff;
+    --line:#e2e7f0; --brand:#1f5fae; --brand-deep:#143f76;
+    --ltel:#2563eb; --rael:#0d9488; --sife:#b45309; --special:#7c3aed; --bias:#be123c;
+    --shadow:0 16px 40px -24px rgba(20,40,80,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Inter",system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.55}
+  .wrap{max-width:1100px;margin:0 auto;padding:clamp(20px,4vw,48px)}
+  header.hero{background:linear-gradient(135deg,var(--brand) 0%,var(--brand-deep) 100%);color:#fff;border-radius:24px;padding:clamp(26px,4vw,46px);box-shadow:var(--shadow)}
+  header.hero .eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;opacity:.85}
+  header.hero h1{font-family:"Fraunces",serif;font-weight:800;font-size:clamp(28px,4.4vw,46px);line-height:1.05;margin:10px 0 12px}
+  header.hero p{max-width:62ch;font-size:clamp(15px,1.5vw,18px);opacity:.95}
+  header.hero .by{margin-top:16px;font-weight:600;font-size:15px;opacity:.9}
+  h2{font-family:"Fraunces",serif;font-weight:800;font-size:clamp(22px,2.8vw,30px);margin:0 0 6px}
+  .section{margin-top:clamp(28px,4vw,46px)}
+  .lead{color:var(--muted);max-width:70ch;margin-bottom:18px}
+
+  /* identification flow */
+  .flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;box-shadow:var(--shadow)}
+  .step .n{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:var(--brand);color:#fff;font-weight:700;font-size:15px;margin-bottom:10px}
+  .step h3{font-size:16px;margin-bottom:6px}
+  .step p{font-size:13.5px;color:var(--muted)}
+  .step .arrow{position:absolute;right:-11px;top:50%;transform:translateY(-50%);color:var(--line);font-size:22px;z-index:2}
+  @media(max-width:760px){.step .arrow{display:none}}
+
+  /* tabs */
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+  .tab{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 16px;font-weight:600;font-size:14px;color:var(--muted);transition:.16s}
+  .tab:hover{border-color:var(--brand)}
+  .tab.on{color:#fff;border-color:transparent}
+  .tab[data-c="ltel"].on{background:var(--ltel)} .tab[data-c="rael"].on{background:var(--rael)}
+  .tab[data-c="sife"].on{background:var(--sife)} .tab[data-c="special"].on{background:var(--special)}
+  .panel{display:none;animation:fade .35s ease}
+  .panel.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .pop{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+  .pop .bar{padding:18px 22px;color:#fff}
+  .pop .bar h3{font-family:"Fraunces",serif;font-weight:800;font-size:22px;margin:0}
+  .pop .bar .full{font-size:13.5px;opacity:.92;font-weight:500}
+  .pop .grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  @media(max-width:720px){.pop .grid{grid-template-columns:1fr}}
+  .pop .box{padding:18px 22px;border-top:1px solid var(--line)}
+  .pop .box:nth-child(even){border-left:1px solid var(--line)}
+  @media(max-width:720px){.pop .box:nth-child(even){border-left:none}}
+  .pop .box h4{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+  .pop ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .pop li{position:relative;padding-left:18px;font-size:14.2px}
+  .pop li::before{content:"";position:absolute;left:0;top:8px;width:8px;height:8px;border-radius:3px;background:currentColor;opacity:.55}
+  .c-ltel{color:var(--ltel)} .c-rael{color:var(--rael)} .c-sife{color:var(--sife)} .c-special{color:var(--special)}
+  .bg-ltel{background:var(--ltel)} .bg-rael{background:var(--rael)} .bg-sife{background:var(--sife)} .bg-special{background:var(--special)}
+
+  /* proficiency table */
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);font-size:14px}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#eef3fb;font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-deep)}
+  tr:last-child td{border-bottom:none}
+
+  /* bias */
+  .bias{background:#fff;border:1px solid var(--line);border-left:5px solid var(--bias);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+  .bias .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+  @media(max-width:720px){.bias .row{grid-template-columns:1fr}}
+  .bias .pit h4{color:var(--bias);font-size:14px;margin-bottom:4px}
+  .bias .fix h4{color:#15803d;font-size:14px;margin-bottom:4px}
+  .bias p{font-size:14px;color:var(--muted)}
+  .bias .item{margin-bottom:12px}
+
+  .refs{margin-top:clamp(28px,4vw,46px);background:#eef1f7;border:1px solid var(--line);border-radius:18px;padding:22px}
+  .refs h2{font-size:18px}
+  .refs ol{margin:10px 0 0 20px;font-size:12.5px;color:var(--muted)}
+  .refs li{margin-bottom:8px;line-height:1.45}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  .pill{display:inline-block;background:rgba(255,255,255,.16);border-radius:8px;padding:4px 11px;font-size:12.5px;font-weight:600;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Educator Quick-Reference Tool</div>
+    <h1>Identifying &amp; Supporting English Learners</h1>
+    <p>A practical guide for understanding how English learners (ELs) are identified, distinguishing key EL subpopulations, and choosing classroom supports that fit each student. ELs are a <strong>heterogeneous group</strong> — this tool is built to help educators see the student, not a stereotype.</p>
+    <div class="by">Colton Sharp · ELL 515 · SLO 1 Artifact</div>
+    <div class="pill">Grounded in IRIS Center, OELA, Colorín Colorado &amp; the Arizona EL Handbook</div>
+  </header>
+
+  <!-- IDENTIFICATION -->
+  <section class="section">
+    <h2>How Are English Learners Identified?</h2>
+    <p class="lead">In Arizona, identification follows a consistent legal process at enrollment, ensuring students who need language support are found and served (Arizona Department of Education [ADE], 2024).</p>
+    <div class="flow">
+      <div class="step"><div class="n">1</div><h3>Home Language Survey</h3><p>At enrollment, every family completes the Home Language Survey (HLS). If a language other than English is indicated, the student is referred for screening.</p><span class="arrow">→</span></div>
+      <div class="step"><div class="n">2</div><h3>Placement Screener (AZELLA)</h3><p>The student takes the AZELLA placement test to measure English proficiency in listening, speaking, reading, and writing.</p><span class="arrow">→</span></div>
+      <div class="step"><div class="n">3</div><h3>Classification &amp; Placement</h3><p>Results determine EL status and the appropriate language program. Families are notified and may consent to services.</p><span class="arrow">→</span></div>
+      <div class="step"><div class="n">4</div><h3>Annual Reassessment</h3><p>ELs take the AZELLA annually to monitor growth toward proficiency and eventual reclassification.</p><span class="arrow">→</span></div>
+      <div class="step"><div class="n">5</div><h3>Reclassification &amp; Monitoring</h3><p>Once proficient, students are reclassified and monitored to confirm success in mainstream classes.</p></div>
+    </div>
+  </section>
+
+  <!-- POPULATIONS -->
+  <section class="section">
+    <h2>Know the Subpopulations</h2>
+    <p class="lead">"English learner" is an umbrella term. These groups have very different histories and needs — click each to compare characteristics and the supports that fit.</p>
+    <div class="tabs">
+      <div class="tab on" data-c="ltel" data-t="ltel">LTEL</div>
+      <div class="tab" data-c="rael" data-t="rael">RAEL</div>
+      <div class="tab" data-c="sife" data-t="sife">SIFE</div>
+      <div class="tab" data-c="special" data-t="special">Special Population: Refugee</div>
+    </div>
+
+    <div class="panel on" id="ltel">
+      <div class="pop">
+        <div class="bar bg-ltel"><h3>LTEL</h3><div class="full">Long-Term English Learner</div></div>
+        <div class="grid">
+          <div class="box"><h4>Who they are</h4><ul class="c-ltel">
+            <li>Classified as an EL for <strong>6+ years</strong> without reaching reclassification.</li>
+            <li>Typically U.S.-schooled, often since kindergarten.</li>
+            <li>Frequently sound fluent in conversational English.</li>
+          </ul></div>
+          <div class="box"><h4>Key characteristics &amp; needs</h4><ul class="c-ltel">
+            <li>Strong social language, but gaps in <strong>academic language &amp; literacy</strong>.</li>
+            <li>Can be "invisible" — oral fluency masks the need (OELA, 2024).</li>
+            <li>May feel stuck, disengaged, or mislabeled over time.</li>
+          </ul></div>
+          <div class="box"><h4>Classroom supports &amp; scaffolds</h4><ul class="c-ltel">
+            <li>Explicit <strong>academic vocabulary</strong> &amp; discipline-specific language instruction.</li>
+            <li>Structured reading/writing in the content areas; sentence frames.</li>
+            <li>Rigorous, grade-level tasks — <em>not</em> remediation that lowers expectations.</li>
+            <li>Goal-setting toward reclassification so progress is visible.</li>
+          </ul></div>
+          <div class="box"><h4>What proficiency data may suggest</h4><ul class="c-ltel">
+            <li>High speaking/listening but lower reading/writing scores → target academic literacy, not basic communication.</li>
+          </ul></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="rael">
+      <div class="pop">
+        <div class="bar bg-rael"><h3>RAEL</h3><div class="full">Recently Arrived English Learner (Newcomer)</div></div>
+        <div class="grid">
+          <div class="box"><h4>Who they are</h4><ul class="c-rael">
+            <li>Enrolled in U.S. schools a <strong>short time</strong> (ESSA: under 12 months; often the first few years).</li>
+            <li>New to U.S. school culture, routines, and language.</li>
+            <li>May have strong, on-grade education in their home language.</li>
+          </ul></div>
+          <div class="box"><h4>Key characteristics &amp; needs</h4><ul class="c-rael">
+            <li>Early stages of English; a possible <strong>silent period</strong> is normal.</li>
+            <li>Adjusting culturally and socially as well as linguistically.</li>
+            <li>Like Moisés in <em>Immersion</em>, may understand the content but not yet the language carrying it (EALTeam SIS, 2013).</li>
+          </ul></div>
+          <div class="box"><h4>Classroom supports &amp; scaffolds</h4><ul class="c-rael">
+            <li>Comprehensible input: visuals, gestures, realia, demonstrations.</li>
+            <li>Native-language resources, bilingual partners, translation tools.</li>
+            <li>Allow non-verbal &amp; drawn responses; honor the silent period.</li>
+            <li>Build on existing content knowledge from prior schooling.</li>
+          </ul></div>
+          <div class="box"><h4>What proficiency data may suggest</h4><ul class="c-rael">
+            <li>Low scores across all domains → focus first on access &amp; comprehension; don't mistake a language barrier for low ability.</li>
+          </ul></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="sife">
+      <div class="pop">
+        <div class="bar bg-sife"><h3>SIFE / SLIFE</h3><div class="full">Students with Interrupted (or Limited) Formal Education</div></div>
+        <div class="grid">
+          <div class="box"><h4>Who they are</h4><ul class="c-sife">
+            <li>Significant <strong>gaps in prior schooling</strong> (often 2+ years).</li>
+            <li>May be below grade level in <strong>home-language</strong> literacy &amp; numeracy.</li>
+            <li>Schooling interrupted by migration, conflict, or limited access.</li>
+          </ul></div>
+          <div class="box"><h4>Key characteristics &amp; needs</h4><ul class="c-sife">
+            <li>Building English <em>and</em> foundational academic skills at once.</li>
+            <li>Unfamiliar with formal school expectations &amp; routines.</li>
+            <li>Bring rich life experience &amp; resilience as assets (Colorín Colorado, n.d.).</li>
+          </ul></div>
+          <div class="box"><h4>Classroom supports &amp; scaffolds</h4><ul class="c-sife">
+            <li>Foundational literacy/numeracy alongside grade-level content.</li>
+            <li>Explicit teaching of school routines and "how to do school."</li>
+            <li>Highly scaffolded, relevant tasks; strong relationships &amp; mentoring.</li>
+            <li>Avoid grade retention as a default; build on strengths.</li>
+          </ul></div>
+          <div class="box"><h4>What proficiency data may suggest</h4><ul class="c-sife">
+            <li>Low English <em>and</em> low home-language literacy → needs foundational skill-building, not just language acquisition.</li>
+          </ul></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="special">
+      <div class="pop">
+        <div class="bar bg-special"><h3>Refugee Students</h3><div class="full">Special EL Population</div></div>
+        <div class="grid">
+          <div class="box"><h4>Who they are</h4><ul class="c-special">
+            <li>Resettled after fleeing conflict, persecution, or disaster.</li>
+            <li>Often arrive with interrupted schooling (may also be SIFE).</li>
+            <li>May have experienced trauma or time in refugee camps (Colorín Colorado, n.d.).</li>
+          </ul></div>
+          <div class="box"><h4>Key characteristics &amp; needs</h4><ul class="c-special">
+            <li>Social-emotional safety is a prerequisite for learning.</li>
+            <li>Adjusting to a new country, culture, and language simultaneously.</li>
+            <li>Families may need wraparound and community connection.</li>
+          </ul></div>
+          <div class="box"><h4>Classroom supports &amp; scaffolds</h4><ul class="c-special">
+            <li><strong>Trauma-informed</strong>, predictable, welcoming classroom routines.</li>
+            <li>Connect families to school counselors &amp; community resources.</li>
+            <li>Culturally responsive teaching that affirms students' identities.</li>
+            <li>Patience, relationship-building, and newcomer language supports.</li>
+          </ul></div>
+          <div class="box"><h4>What proficiency data may suggest</h4><ul class="c-special">
+            <li>Read scores alongside background: low performance may reflect trauma or interrupted schooling, not ability or effort.</li>
+          </ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFICIENCY -->
+  <section class="section">
+    <h2>What Proficiency &amp; Assessment Data Suggest</h2>
+    <p class="lead">AZELLA reports growth across domains. The same overall score can mean very different things — always read the <em>profile</em>, not just the number, and pair it with what you know about the student.</p>
+    <table>
+      <tr><th>If the data show…</th><th>It may suggest…</th><th>Instructional response</th></tr>
+      <tr><td>High speaking/listening, low reading/writing</td><td>Possible LTEL pattern; strong social language, weak academic literacy</td><td>Explicit academic vocabulary &amp; content-area writing; keep rigor high</td></tr>
+      <tr><td>Low across all four domains, recent arrival</td><td>Newcomer/RAEL at early acquisition; a language barrier, not a learning barrier</td><td>Comprehensible input, native-language support, honor the silent period</td></tr>
+      <tr><td>Low English and low home-language literacy</td><td>Possible SIFE; foundational skill gaps</td><td>Foundational literacy/numeracy with grade-level content; relationships first</td></tr>
+      <tr><td>Stalled growth over several years</td><td>Student may be "stuck"; current supports aren't working</td><td>Re-examine instruction &amp; engagement; set visible reclassification goals</td></tr>
+    </table>
+  </section>
+
+  <!-- BIAS -->
+  <section class="section">
+    <h2>Avoiding Misidentification &amp; Bias</h2>
+    <p class="lead">The biggest risks come from treating ELs as a single group or confusing a language difference with a disability or low ability (IRIS Center, n.d.).</p>
+    <div class="bias">
+      <div class="item">
+        <div class="row">
+          <div class="pit"><h4>⚠ Pitfall: Mistaking a language barrier for a learning disability</h4><p>Referring ELs to special education because of slow progress in English, when the real issue is still-developing language.</p></div>
+          <div class="fix"><h4>✓ Avoid it</h4><p>Distinguish language acquisition from disability; gather data over time and in the home language before referral. Difference ≠ disorder.</p></div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="row">
+          <div class="pit"><h4>⚠ Pitfall: "Sounds fluent, must be fine"</h4><p>Assuming conversational fluency equals academic readiness — the classic way LTELs get overlooked.</p></div>
+          <div class="fix"><h4>✓ Avoid it</h4><p>Check academic literacy directly, not just oral fluency. Social language develops faster than academic language.</p></div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="row">
+          <div class="pit"><h4>⚠ Pitfall: Deficit thinking &amp; one-size-fits-all</h4><p>Seeing ELs only for what they lack, or treating every EL the same regardless of background.</p></div>
+          <div class="fix"><h4>✓ Avoid it</h4><p>Use an asset-based lens; honor home language and lived experience (Pang interview). Get to know each student's unique story.</p></div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="row">
+          <div class="pit"><h4>⚠ Pitfall: Confusing quiet with not learning</h4><p>Interpreting a newcomer's silent period as disengagement or low ability.</p></div>
+          <div class="fix"><h4>✓ Avoid it</h4><p>Expect and allow a silent period; provide low-anxiety ways to show understanding (drawing, pointing, native language).</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFERENCES on the visual -->
+  <div class="refs">
+    <h2>References (Course Resources)</h2>
+    <ol>
+      <li>Arizona Department of Education, Office of English Language Acquisition Services. (2024). <em>EL handbook: A guide for practitioners of English language learning</em> (pp. 7–14). https://www.azed.gov/</li>
+      <li>Colorín Colorado. (n.d.). <em>Special populations: English language learners</em>. https://www.colorincolorado.org/ell-basics/special-populations</li>
+      <li>EALTeam SIS. (2013, May 17). <em>The importance of ELL strategies – Immersion (Moisés in math class)</em> [Video]. YouTube.</li>
+      <li>IRIS Center. (n.d.). <em>English learners</em> [Page 1]. Peabody College, Vanderbilt University. https://iris.peabody.vanderbilt.edu/module/ell/</li>
+      <li>U.S. Department of Education, Office of English Language Acquisition. (2024). <em>Long-term English learners</em>. National Clearinghouse for English Language Acquisition.</li>
+    </ol>
+  </div>
+
+  <footer>EL Quick-Reference Tool · Designed for classroom use · Colton Sharp, ELL 515</footer>
+</div>
+
+<script>
+  const tabs=[...document.querySelectorAll(".tab")];
+  const panels=[...document.querySelectorAll(".panel")];
+  tabs.forEach(t=>t.addEventListener("click",()=>{
+    tabs.forEach(x=>x.classList.remove("on"));
+    panels.forEach(p=>p.classList.remove("on"));
+    t.classList.add("on");
+    document.getElementById(t.dataset.t).classList.add("on");
+  }));
+</script>
+</body>
+</html>
