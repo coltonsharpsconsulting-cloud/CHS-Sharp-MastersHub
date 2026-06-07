@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Four Theories of Bilingual Development — A Field Guide for the Math & CS Classroom · Colton Sharp</title>
+<meta name="description" content="An infographic connecting four theories of bilingual development to practical strategies for multilingual learners in secondary mathematics and computer science (SEI). ELL 515 SLO 3 — Colton Sharp." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;0,6..12,800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1b2430; --soft:#566372; --paper:#f5f3ee; --card:#ffffff; --line:#e6e2d8;
+    --t1:#0f766e; --t1b:#e3f3f0;   /* translanguaging - teal */
+    --t2:#b45309; --t2b:#fbeed9;   /* krashen - amber */
+    --t3:#6d28d9; --t3b:#efe7fb;   /* social interactionist - violet */
+    --t4:#1d4ed8; --t4b:#e2eafc;   /* cognitive - blue */
+    --gold:#b8842b;
+    --display:"Fraunces",Georgia,serif; --body:"Nunito Sans",system-ui,-apple-system,sans-serif;
+    --shadow:0 16px 40px -24px rgba(20,40,60,.45);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 clamp(1rem,4vw,2rem)}
+
+  header.top{background:linear-gradient(135deg,#0b3b56,#0f766e 60%,#157f74);color:#eafdf9;padding:clamp(2rem,5vw,3.2rem) 0 clamp(1.6rem,4vw,2.4rem);position:relative;overflow:hidden}
+  header.top::after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(255,255,255,.14),transparent 60%)}
+  .kicker{font-weight:800;letter-spacing:.22em;text-transform:uppercase;font-size:.72rem;color:#aef0e4}
+  header.top h1{font-family:var(--display);font-weight:900;font-size:clamp(1.8rem,4.6vw,2.9rem);line-height:1.04;margin:.5rem 0 .3rem}
+  header.top .sub{font-family:var(--display);font-style:italic;font-weight:500;font-size:clamp(1.05rem,2.4vw,1.35rem);opacity:.95}
+  header.top .by{margin-top:.9rem;font-size:.86rem;font-weight:700;opacity:.9}
+  header.top .by span{opacity:.7;font-weight:600}
+
+  .intro{padding:1.5rem 0 .2rem;color:var(--soft);max-width:70ch;font-size:1.02rem}
+  .legend{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 .4rem}
+  .pill{font-size:.74rem;font-weight:800;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--line);background:#fff}
+
+  .grid{display:grid;grid-template-columns:1fr;gap:1.3rem;margin:1.4rem 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);break-inside:avoid}
+  .card .bar{padding:1rem 1.3rem;display:flex;align-items:center;gap:.9rem;color:#fff}
+  .card .num{width:40px;height:40px;border-radius:11px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:1.3rem;flex:none}
+  .card .bar h2{font-family:var(--display);font-weight:900;font-size:1.32rem;margin:0;line-height:1.05}
+  .card .bar .scholar{font-size:.78rem;font-weight:700;opacity:.92;margin-top:1px}
+  .card .body{padding:1.05rem 1.3rem 1.2rem}
+  .row{margin:.2rem 0 .85rem}
+  .row h3{font-family:var(--body);font-weight:800;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 .25rem;display:flex;align-items:center;gap:.45rem}
+  .row h3::before{content:"";width:14px;height:3px;border-radius:2px;background:currentColor}
+  .row p{margin:.1rem 0;font-size:.95rem}
+  .row ul{margin:.25rem 0;padding-left:1.15rem}
+  .row li{margin:.22rem 0;font-size:.93rem}
+  .res{display:inline-flex;align-items:center;gap:.4rem;font-weight:800;font-size:.86rem;text-decoration:none;padding:.4rem .8rem;border-radius:9px}
+  .cite{color:var(--soft);font-style:italic}
+
+  /* theme per card */
+  .c1 .bar{background:var(--t1)} .c1 .row h3{color:var(--t1)} .c1 .res{background:var(--t1b);color:var(--t1)}
+  .c2 .bar{background:var(--t2)} .c2 .row h3{color:var(--t2)} .c2 .res{background:var(--t2b);color:var(--t2)}
+  .c3 .bar{background:var(--t3)} .c3 .row h3{color:var(--t3)} .c3 .res{background:var(--t3b);color:var(--t3)}
+  .c4 .bar{background:var(--t4)} .c4 .row h3{color:var(--t4)} .c4 .res{background:var(--t4b);color:var(--t4)}
+
+  footer{margin:1.5rem 0 3rem}
+  .refs{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.1rem 1.3rem}
+  .refs h2{font-family:var(--display);font-weight:800;font-size:1.1rem;margin:.1rem 0 .6rem}
+  .refs p{font-size:.82rem;color:var(--soft);margin:.3rem 0;padding-left:1.4rem;text-indent:-1.4rem}
+  .ack{margin-top:.9rem;font-size:.78rem;color:var(--soft);background:var(--t2b);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:.6rem .85rem}
+  .madeby{text-align:center;color:var(--soft);font-size:.78rem;margin-top:1rem}
+
+  @media (min-width:760px){ .grid{grid-template-columns:1fr 1fr} }
+  @media print{
+    body{background:#fff} header.top{color:#08313c;background:#fff;border-bottom:3px solid var(--t1)}
+    .kicker,header.top .sub,header.top .by{color:#0f766e}
+    .card,.refs{box-shadow:none} .grid{grid-template-columns:1fr 1fr}
+    a{color:inherit;text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <p class="kicker">ELL 515 · Structured English Immersion · SLO 3</p>
+  <h1>Four Theories of Bilingual Development</h1>
+  <p class="sub">A field guide for the secondary mathematics &amp; computer science classroom</p>
+  <p class="by">Colton Sharp <span>· American Leadership Academy · Grades 9–12 · Program model: Structured English Immersion (SEI)</span></p>
+</div></header>
+
+<div class="wrap">
+  <p class="intro">Multilingual learners in my Algebra, AP Calculus, and Computer Science classes can grasp the content yet stall on the <strong>academic language</strong> that carries it. These four theories explain <em>why</em> — and each one points to concrete moves I can make so language never hides what a student actually knows. Every panel ties a theory to classroom application, teacher advice, and a resource to go deeper.</p>
+  <div class="legend">
+    <span class="pill" style="color:var(--t1)">① Translanguaging</span>
+    <span class="pill" style="color:var(--t2)">② Krashen — Input &amp; Affective Filter</span>
+    <span class="pill" style="color:var(--t3)">③ Social Interactionist</span>
+    <span class="pill" style="color:var(--t4)">④ Cognitive &amp; Academic Language</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- 1 TRANSLANGUAGING -->
+    <article class="card c1">
+      <div class="bar"><span class="num">1</span><div><h2>Translanguaging</h2><div class="scholar">Ofelia García</div></div></div>
+      <div class="body">
+        <div class="row"><h3>Premise</h3><p>Bilinguals don't have two separate languages — they have <strong>one integrated linguistic repertoire</strong> and draw on all of it to make meaning. Translanguaging treats a student's home language as a <strong>resource, not a deficit</strong> <span class="cite">(García, 2013)</span>.</p></div>
+        <div class="row"><h3>In the math &amp; CS classroom</h3><p>Students reason about a proof or debug code in their strongest language, then move into academic English. Comprehension can happen first; English output follows — which protects the math from the language barrier.</p></div>
+        <div class="row"><h3>Advice for teachers</h3><ul>
+          <li>Build a <strong>translanguaging space</strong>: let students preview, discuss, and draft in their home language before producing academic English.</li>
+          <li>Use bilingual glossaries for technical terms (e.g., <em>slope / pendiente</em>, <em>loop / bucle</em>) and welcome first-language annotation of problems.</li>
+          <li>Let a student explain their thinking in Spanish, then co-construct the written English justification.</li>
+        </ul></div>
+        <a class="res" href="https://www.cuny-nysieb.org/wp-content/uploads/2016/04/Translanguaging-Guide-March-2013.pdf" target="_blank" rel="noopener">Go deeper → CUNY-NYSIEB Translanguaging Guide</a>
+      </div>
+    </article>
+
+    <!-- 2 KRASHEN -->
+    <article class="card c2">
+      <div class="bar"><span class="num">2</span><div><h2>Input &amp; Affective Filter</h2><div class="scholar">Stephen Krashen</div></div></div>
+      <div class="body">
+        <div class="row"><h3>Premise</h3><p>Language is mostly <strong>acquired subconsciously through comprehensible input</strong> — messages just beyond a learner's current level ("i+1"). A high <strong>affective filter</strong> (anxiety, low confidence) can block that input from ever landing <span class="cite">(Krashen, 1987)</span>.</p></div>
+        <div class="row"><h3>In the math &amp; CS classroom</h3><p>Make rigorous content <em>comprehensible</em> — visuals, manipulatives, worked examples, gestures, live-coded demos — while keeping anxiety low so students stay open to the language around the math.</p></div>
+        <div class="row"><h3>Advice for teachers</h3><ul>
+          <li>Front-load key vocabulary with visuals and sentence frames; pair new terms with worked examples.</li>
+          <li><strong>Lower the filter:</strong> generous wait time, low-stakes participation, no cold-call shaming.</li>
+          <li>Scaffold the <em>language</em>, never the rigor — keep the grade-level concept, simplify the wording <span class="cite">(Malone, 2012)</span>.</li>
+        </ul></div>
+        <a class="res" href="https://www.sdkrashen.com/content/books/principles_and_practice.pdf" target="_blank" rel="noopener">Go deeper → Krashen, Principles and Practice</a>
+      </div>
+    </article>
+
+    <!-- 3 SOCIAL INTERACTIONIST -->
+    <article class="card c3">
+      <div class="bar"><span class="num">3</span><div><h2>Social Interactionist</h2><div class="scholar">Vygotsky · Long</div></div></div>
+      <div class="body">
+        <div class="row"><h3>Premise</h3><p>Language grows through <strong>meaningful social interaction</strong>, not grammar drills. Learners advance within their <strong>Zone of Proximal Development</strong> with support from teachers and peers, and negotiation of meaning drives acquisition <span class="cite">(Malone, 2012)</span>.</p></div>
+        <div class="row"><h3>In the math &amp; CS classroom</h3><p>Structured talk — math discourse, think-pair-share, pair programming — gives multilingual learners an authentic reason to use academic language. <strong>Classroom discourse is the engine of academic language.</strong></p></div>
+        <div class="row"><h3>Advice for teachers</h3><ul>
+          <li>Design talk-rich tasks with defined roles and sentence frames for academic <strong>language functions</strong> — explain, justify, compare, predict <span class="cite">(Stanford, n.d.)</span>.</li>
+          <li>Teach the language of arguing and defending a solution explicitly <span class="cite">(Sweetwater Union HSD, 2010)</span>.</li>
+          <li>Model academic discourse, then hand it to students through accountable-talk routines.</li>
+        </ul></div>
+        <a class="res" href="https://web.stanford.edu/~sjwiles/elpa21/module2/module2/resources/LanguageFunctionsForms.pdf" target="_blank" rel="noopener">Go deeper → Language Functions &amp; Forms (Stanford)</a>
+      </div>
+    </article>
+
+    <!-- 4 COGNITIVE / ACADEMIC LANGUAGE -->
+    <article class="card c4">
+      <div class="bar"><span class="num">4</span><div><h2>Cognitive &amp; Academic Language</h2><div class="scholar">Cognitive SLA · Cummins (BICS/CALP)</div></div></div>
+      <div class="body">
+        <div class="row"><h3>Premise</h3><p>Acquisition is <strong>cognitive skill-building</strong> — moving from controlled to automatic processing through meaningful practice. Crucially, conversational fluency develops <em>faster</em> than academic language, so a student can sound fluent yet struggle with the academic language of content <span class="cite">(IRIS Center, n.d.; Malone, 2012)</span>.</p></div>
+        <div class="row"><h3>In the math &amp; CS classroom</h3><p>Don't read conversational English as readiness for the academic English of definitions, proofs, and algorithms. Separate <strong>content difficulty from language difficulty</strong> — and teach the academic register directly.</p></div>
+        <div class="row"><h3>Advice for teachers</h3><ul>
+          <li>Explicitly teach academic vocabulary and discourse; use graphic organizers and worked examples for repeated, meaningful practice toward automaticity.</li>
+          <li>Use language-function frames so students can produce the academic language, not just understand it <span class="cite">(Sweetwater Union HSD, 2010)</span>.</li>
+          <li><strong>Assess the math, not the English</strong> — give read-alouds, glossaries, and alternate ways to show mastery <span class="cite">(IRIS Center, n.d.)</span>.</li>
+        </ul></div>
+        <a class="res" href="https://iris.peabody.vanderbilt.edu/module/ell/" target="_blank" rel="noopener">Go deeper → IRIS Center: English Learners</a>
+      </div>
+    </article>
+
+  </div>
+
+  <footer>
+    <div class="refs">
+      <h2>Connections to course materials &amp; references (APA 7)</h2>
+      <p>García, O. (2013). Theorizing translanguaging for educators. In <em>Translanguaging: A CUNY-NYSIEB guide for educators</em> (pp. 1–6). CUNY-NYSIEB.</p>
+      <p>IRIS Center. (n.d.). <em>English learners: Understanding the second language acquisition process</em> (Page 2). Peabody College, Vanderbilt University.</p>
+      <p>Krashen, S. D. (1987). <em>Principles and practice in second language acquisition.</em> Prentice-Hall.</p>
+      <p>Malone, D. (2012). <em>Theories and research of second language acquisition.</em> SIL International.</p>
+      <p>Stanford University. (n.d.). <em>Language functions and forms: A brief summary.</em> Understanding Language, Stanford University.</p>
+      <p>Sweetwater Union High School District. (2010). <em>Academic language function toolkit.</em></p>
+      <div class="ack"><strong>AI-use acknowledgment:</strong> Generative AI (Claude) assisted with drafting and visual design of this infographic; all content was reviewed, revised, and verified against the course materials by the author, consistent with the ELL 515 AI policy.</div>
+    </div>
+    <p class="madeby">ELL 515 · SLO 3 Artifact · Colton Sharp · American Leadership Academy</p>
+  </footer>
+</div>
+</body>
+</html>
