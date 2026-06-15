@@ -1,0 +1,362 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stevenson HS — Mid-Course Leadership Team Learning Demonstration</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='13' fill='%23f5b545'/><text x='32' y='44' font-size='34' font-family='Georgia' font-weight='bold' text-anchor='middle' fill='%230b0f17'>S</text></svg>">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0b0f17;--panel:#131b2a;--panel2:#0f1622;--ink:#eaf0f8;--muted:#93a2ba;--line:#26324a;--accent:#f5b545}
+html,body{height:100%}
+body{background:radial-gradient(1200px 700px at 70% -10%,#16213a 0%,var(--bg) 55%);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;overflow:hidden}
+.app{position:fixed;inset:0;display:flex;flex-direction:column}
+/* top bar */
+.topbar{display:flex;align-items:center;gap:14px;padding:16px 26px}
+.speaker{display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(-6px);transition:.5s}
+.speaker.show{opacity:1;transform:none}
+.av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:20px;
+  color:#0b0f17;background:var(--accent);box-shadow:0 6px 22px -6px var(--accent)}
+.sp-name{font-weight:700;font-size:15px;line-height:1.1}
+.sp-role{font-size:12.5px;color:var(--muted)}
+.partlab{margin-left:auto;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+/* stage */
+.stage{flex:1;display:grid;place-items:center;position:relative;padding:10px 4vw 30px}
+.slide{position:absolute;inset:0;display:grid;place-items:center;padding:0 5vw;opacity:0;pointer-events:none;
+  transform:translateY(14px) scale(.99);transition:opacity .55s,transform .55s}
+.slide.active{opacity:1;pointer-events:auto;transform:none}
+.slide .inner{width:100%;max-width:1000px;text-align:center}
+h1{font-family:Georgia,serif;font-size:clamp(34px,6vw,68px);font-weight:800;letter-spacing:-.01em}
+h2{font-family:Georgia,serif;font-size:clamp(24px,3.4vw,40px)}
+.slide-title{font-family:Georgia,serif;font-size:clamp(20px,2.6vw,30px);color:var(--accent);margin-bottom:26px;font-weight:700}
+.muted{color:var(--muted)}.chip{display:inline-block;background:#1b2738;border:1px solid var(--line);color:#cdd9ec;
+  padding:7px 13px;border-radius:999px;font-size:13.5px;margin:4px}
+/* title */
+.crest{width:108px;height:108px;border-radius:24px;margin:0 auto 26px;display:grid;place-items:center;font-family:Georgia,serif;
+  font-weight:800;font-size:34px;color:#0b0f17;background:linear-gradient(135deg,#f5b545,#e89234);box-shadow:0 18px 50px -14px #f5b54588}
+.subtitle{margin-top:14px;font-size:clamp(15px,2vw,20px);color:#cdd9ec}
+.present-to{margin-top:22px;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.byline{margin-top:6px;color:var(--muted);font-size:14px}
+/* cold open */
+.coldopen .ql{font-family:Georgia,serif;font-size:90px;color:var(--accent);line-height:.4;opacity:.5}
+.bigq{font-family:Georgia,serif;font-size:clamp(30px,5.6vw,62px);font-weight:800;line-height:1.06;margin-top:6px}
+.bigq-sub{margin-top:26px;color:var(--muted);font-size:clamp(15px,2vw,19px)}
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.road-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px 20px;text-align:left;
+  opacity:0;transform:translateY(16px);transition:.5s}
+.slide.live .road-card{opacity:1;transform:none}
+.slide.live .road-card[data-step="2"]{transition-delay:.13s}.slide.live .road-card[data-step="3"]{transition-delay:.26s}
+.rn{width:34px;height:34px;border-radius:9px;background:var(--accent);color:#0b0f17;font-weight:800;display:grid;place-items:center;margin-bottom:12px}
+.road-card h3{font-size:19px;margin-bottom:6px}.road-card p{color:var(--muted);font-size:14.5px}
+/* profile */
+.profile{display:flex;gap:30px;align-items:center;text-align:left}
+.avatar{flex:none;width:120px;height:120px;border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-size:54px;
+  font-weight:800;color:#0b0f17;background:linear-gradient(135deg,#f5b545,#e07a5f)}
+.pinfo h2{margin-bottom:14px}.goal{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:16px}
+.goal-label{display:block;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+/* fork */
+.fork{position:relative}.fork-start{font-size:16px;color:#cdd9ec;margin-bottom:6px}
+.fork-svg{width:100%;height:240px}
+.branch{fill:none;stroke-width:4;stroke-dasharray:1000;stroke-dashoffset:1000;transition:stroke-dashoffset 1.1s ease}
+.slide.live .branch{stroke-dashoffset:0}
+.branch-up{stroke:#4fd1c5}.branch-down{stroke:#ff6b6b}.fork-dot{fill:var(--accent)}
+.fork-end{position:absolute;font-size:15px;line-height:1.25;padding:10px 14px;border-radius:11px;width:46%;text-align:left;opacity:0;transition:.5s .9s}
+.slide.live .fork-end{opacity:1}
+.fork-end span{font-size:12.5px;color:var(--muted)}
+.fork-end.up{top:6%;right:0;background:#11302c;border:1px solid #2a6b62;color:#bdeee6}
+.fork-end.down{bottom:6%;right:0;background:#321416;border:1px solid #7a3036;color:#f3c6c9}
+/* big statements */
+.bigstate p{margin:10px 0}.bs-1{font-size:clamp(20px,3vw,30px);color:var(--muted)}
+.bs-2{font-size:clamp(18px,2.4vw,24px);color:var(--muted)}
+.bs-1big,.bs-3{font-family:Georgia,serif}.bs-1big{font-size:clamp(30px,5vw,56px);font-weight:800;color:#fff}
+.bs-3{font-size:clamp(17px,2.3vw,23px);margin-top:18px;line-height:1.4}
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px 18px;opacity:0;transform:translateY(16px);transition:.5s}
+.slide.live .tile{opacity:1;transform:none}.slide.live .tile:nth-child(2){transition-delay:.12s}.slide.live .tile:nth-child(3){transition-delay:.24s}
+.tile .ticon{font-size:34px;color:var(--accent)}.tile .big{font-family:Georgia,serif;font-size:46px;font-weight:800;color:var(--accent)}
+.tile .big span{color:var(--muted);font-size:30px;margin:0 4px}.tile h3{margin:8px 0 6px;font-size:18px}.tile p{color:var(--muted);font-size:14px}
+/* gap bars */
+.gap{text-align:left;position:relative}
+.gap-line-label{color:#4fd1c5;font-size:14px;font-weight:600}
+.benchmark{position:absolute;left:var(--bm);top:34px;bottom:54px;border-left:2px dashed #4fd1c5}
+.benchmark span{position:absolute;top:-26px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:12px;font-weight:600;color:#4fd1c5;background:#0b0f17;padding:2px 7px;border-radius:6px}
+.barrow{display:flex;align-items:center;gap:14px;margin:14px 0}
+.blab{width:160px;flex:none;text-align:right;color:#cdd9ec;font-size:14.5px}
+.bar{height:34px;border-radius:7px;width:0;transition:width 1s ease;display:flex;align-items:center;position:relative;
+  background:linear-gradient(90deg,#4fd1c5,#3aa99f)}
+.bar.h{background:linear-gradient(90deg,#ff6b6b,#e0574f)}
+.slide.live .bar{width:calc(var(--w)*4.8)}
+.bar i{position:absolute;right:-46px;font-style:normal;font-size:13.5px;color:#cdd9ec;font-weight:700}
+.gap-hint,.gap-foot{color:var(--muted);font-size:14px;margin-top:18px}.gap-foot b{color:#cdd9ec}
+/* timeline */
+.timeline{position:relative;height:300px}
+.tl-track{position:absolute;left:2%;right:2%;top:52%;height:3px;background:var(--line)}
+.tl-node{position:absolute;left:var(--x);top:0;height:100%;width:160px;transform:translateX(-50%);text-align:center;opacity:0;transition:.5s}
+.slide.live .tl-node{opacity:1}
+.slide.live .tl-node:nth-child(3){transition-delay:.15s}.slide.live .tl-node:nth-child(4){transition-delay:.3s}
+.slide.live .tl-node:nth-child(5){transition-delay:.45s}.slide.live .tl-node:nth-child(6){transition-delay:.6s}
+.tl-node .dot{position:absolute;left:50%;top:calc(52% - 7px);width:15px;height:15px;border-radius:50%;background:var(--accent);transform:translateX(-50%);box-shadow:0 0 0 5px #f5b54533}
+.tl-node b{position:absolute;top:14%;left:50%;transform:translateX(-50%);font-size:15px;color:var(--accent);white-space:nowrap}
+.tl-node p{position:absolute;top:60%;left:50%;transform:translateX(-50%);width:150px;font-size:12.5px;color:var(--muted)}
+.tl-node.now .dot{background:#ff6b6b;box-shadow:0 0 0 5px #ff6b6b33}.tl-node.now b{color:#ff8a8a}
+/* machine / quotes */
+.machine .gear{font-size:50px;color:var(--accent);animation:spin 14s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+blockquote{font-family:Georgia,serif;font-size:clamp(20px,3vw,30px);line-height:1.34;margin:18px auto;max-width:880px}
+blockquote cite{display:block;font-family:system-ui;font-style:normal;font-size:15px;color:var(--muted);margin-top:16px}
+.mfoot{color:var(--muted);font-size:15px;margin-top:10px}
+.hugequote p{font-family:Georgia,serif;font-size:clamp(34px,7vw,76px);font-weight:800;line-height:1.04}
+.hugequote .hl{color:var(--accent)}.hugequote cite{display:block;font-style:normal;font-size:15px;color:var(--muted);margin-top:24px;font-family:system-ui}
+/* flip */
+.flip{perspective:1600px;max-width:560px;height:260px;margin:0 auto;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .9s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.flip.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;padding:30px;display:flex;flex-direction:column;
+  justify-content:center;border:1px solid var(--line)}
+.flip-face.front{background:linear-gradient(160deg,#1a2436,#121a28)}
+.flip-face.back{background:linear-gradient(160deg,#2a1d1f,#1c1416);transform:rotateY(180deg)}
+.flip-face .era{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.flip-face p{font-family:Georgia,serif;font-size:clamp(18px,2.6vw,25px);line-height:1.3}
+.flip-face .src{margin-top:14px;font-size:13px;color:var(--muted)}
+.flip-hint{margin-top:16px;color:var(--muted);font-size:13.5px}
+/* arizona */
+.az{display:flex;gap:26px;align-items:center;text-align:left}
+.az-map{flex:none;width:130px;height:130px;border-radius:18px;display:grid;place-items:center;font-family:Georgia,serif;font-weight:800;
+  font-size:40px;color:#0b0f17;background:linear-gradient(135deg,#f5b545,#c0392b)}
+.az-body blockquote{font-size:clamp(17px,2.3vw,23px);margin:0}.az-win{margin-top:14px;background:#11302c;border:1px solid #2a6b62;border-radius:11px;padding:12px 15px;font-size:15px;color:#bdeee6}
+/* converge */
+.converge{position:relative;height:280px;display:grid;place-items:center}
+.thread{position:absolute;font-size:15px;color:#cdd9ec;background:var(--panel);border:1px solid var(--line);padding:8px 14px;border-radius:999px;opacity:0;transition:.6s}
+.slide.live .thread{opacity:1}
+.t1{top:6%;left:18%}.t2{top:6%;right:18%}.t3{bottom:8%;left:50%;transform:translateX(-50%)}
+.cn-center{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;text-align:center;font-family:Georgia,serif;font-weight:800;
+  font-size:19px;color:#0b0f17;background:radial-gradient(circle,#ff8a8a,#e0574f);box-shadow:0 0 60px -8px #ff6b6b88;transform:scale(.6);opacity:0;transition:.7s .4s}
+.slide.live .cn-center{transform:scale(1);opacity:1}
+/* rec */
+.rec{display:flex;gap:26px;align-items:center;text-align:left}
+.rec-n{flex:none;width:104px;height:104px;border-radius:22px;display:grid;place-items:center;font-family:Georgia,serif;font-weight:800;
+  font-size:52px;color:#0b0f17;background:var(--accent);box-shadow:0 16px 44px -12px var(--accent)}
+.rec-icon{font-size:30px;margin-bottom:6px}.rec-body h2{margin-bottom:8px}.rec-body p{color:var(--muted);font-size:clamp(15px,2vw,18px);line-height:1.45;max-width:640px}
+/* close */
+.close p{margin:16px 0}.cl-1{font-size:clamp(18px,2.6vw,26px);line-height:1.4}
+.cl-2{color:var(--muted);font-size:clamp(16px,2.2vw,21px)}
+.cl-3{font-family:Georgia,serif;font-size:clamp(22px,3.4vw,36px);font-weight:800;color:#fff}
+.cl-thanks{margin-top:24px;font-size:18px;color:var(--accent);letter-spacing:.04em}
+/* controls */
+.controls{display:flex;align-items:center;gap:16px;padding:14px 26px 20px}
+.btn{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:17px;
+  cursor:pointer;display:grid;place-items:center;transition:.2s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.play{width:58px;height:58px;background:var(--accent);color:#0b0f17;border:none;font-size:21px}
+.counter{font-size:13.5px;color:var(--muted);min-width:52px}
+.prog{flex:1;height:6px;background:#1b2738;border-radius:999px;overflow:hidden;cursor:pointer}
+.prog > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f5b545,#4fd1c5);border-radius:999px;transition:width .2s linear}
+.hint{font-size:12.5px;color:var(--muted)}
+/* start overlay */
+.start{position:fixed;inset:0;background:rgba(7,10,16,.92);backdrop-filter:blur(4px);display:grid;place-items:center;z-index:50;text-align:center}
+.start h1{font-size:clamp(28px,5vw,52px)}.start p{color:var(--muted);margin:14px 0 30px;font-size:16px}
+.start .go{display:inline-flex;align-items:center;gap:12px;background:var(--accent);color:#0b0f17;border:none;font-weight:800;font-size:18px;
+  padding:16px 34px;border-radius:999px;cursor:pointer;box-shadow:0 18px 50px -12px #f5b54577}
+.start .meta{margin-top:26px;font-size:13px;color:var(--muted)}
+@media(max-width:760px){.road,.tiles{grid-template-columns:1fr}.profile,.az,.rec{flex-direction:column;text-align:center}.blab{width:96px}}
+</style></head><body>
+<div class="app">
+  <div class="topbar">
+    <div class="speaker" id="speaker"><div class="av" id="av">C</div><div><div class="sp-name" id="spName"></div><div class="sp-role" id="spRole"></div></div></div>
+    <div class="partlab" id="partlab"></div>
+  </div>
+  <div class="stage" id="stage">
+    <section class="slide" data-n="1"><div class="inner"><div class="title-wrap">
+  <div class="crest">SHS</div>
+  <h1>Stevenson High School</h1>
+  <div class="subtitle">Mid-Course Leadership Team Learning Demonstration</div>
+  <div class="present-to">Presented to the Superintendent</div>
+  <div class="byline">A Leadership Team analysis &amp; proposal</div>
+</div></div></section><section class="slide" data-n="2"><div class="inner"><div class="coldopen">
+  <div class="ql">&ldquo;</div>
+  <p class="bigq">Was she foolish<br>to dream that big?</p>
+  <p class="bigq-sub">A student asked me that in my fourth week. Here's why it should worry us both.</p>
+</div></div></section><section class="slide" data-n="3"><div class="inner"><div class="slide-title">Where we're going</div><div class="road">
+  <div class="road-card" data-step="1"><div class="rn">1</div><h3>What happened</h3><p>One student. One counseling appointment.</p></div>
+  <div class="road-card" data-step="2"><div class="rn">2</div><h3>Why it's no accident</h3><p>A hundred-year-old structure, still running.</p></div>
+  <div class="road-card" data-step="3"><div class="rn">3</div><h3>What we're asking</h3><p>Five moves, and your partnership.</p></div>
+</div></div></section><section class="slide" data-n="4"><div class="inner"><div class="slide-title">Meet Carmen</div><div class="profile">
+  <div class="avatar">C</div>
+  <div class="pinfo">
+    <h2>Carmen &middot; <span class="muted">11th grade</span></h2>
+    <div class="chips"><span class="chip">Straight A's</span><span class="chip">Soccer captain</span><span class="chip">Bilingual (ES/EN)</span><span class="chip">Astronomy since <em>Cosmos</em></span></div>
+    <div class="goal"><span class="goal-label">The dream</span> Stanford physics &mdash; the program partnering with NASA</div>
+  </div>
+</div></div></section><section class="slide" data-n="5"><div class="inner"><div class="slide-title">The appointment</div><div class="fork">
+  <div class="fork-start">Carmen asks her counselor for help</div>
+  <svg viewBox="0 0 600 220" class="fork-svg" preserveAspectRatio="xMidYMid meet">
+    <path class="branch branch-down" d="M70,110 C220,110 240,180 530,180"/>
+    <path class="branch branch-up" d="M70,110 C220,110 240,40 530,40"/>
+    <circle class="fork-dot" cx="70" cy="110" r="9"/>
+  </svg>
+  <div class="fork-end up">Stanford &amp; physics<br><span>(what she wanted)</span></div>
+  <div class="fork-end down">Community college, 2-yr certificate<br><span>(before he opened her file)</span></div>
+</div></div></section><section class="slide" data-n="6"><div class="inner"><div class="bigstate">
+  <p class="bs-1">One counselor having a bad day?</p>
+  <p class="bs-2">I don't believe that's what this is.</p>
+  <p class="bs-3">So I asked my leadership team to look &mdash; at our <b>structure</b>, our <b>culture</b>, and our <b>data</b>.</p>
+</div></div></section><section class="slide" data-n="7"><div class="inner"><div class="slide-title">Three structural facts</div><div class="tiles">
+  <div class="tile"><div class="ticon">&#9783;</div><h3>Tracked pathways</h3><p>Students sorted into college vs. career paths years before they're ready to choose.</p></div>
+  <div class="tile"><div class="big">2<span>:</span>896</div><h3>Rationed advising</h3><p>Two counselors for nearly 900 students &rarr; fast defaults.</p></div>
+  <div class="tile"><div class="ticon">&#128274;</div><h3>Gateway friction</h3><p>A straight-A student had "trouble getting placed" in physics &amp; calculus.</p></div>
+</div></div></section><section class="slide" data-n="8"><div class="inner"><div class="slide-title">The fingerprint</div><div class="gap">
+  <div class="gap-line"><span class="gap-line-label">Hispanic students = 14.5% of enrollment</span></div>
+  <div class="bars" data-phase="enroll">
+    <div class="barrow"><span class="blab">Enrollment</span><div class="bar enroll" style="--w:14.5%"><i>14.5%</i></div></div>
+  </div>
+  <p class="gap-hint">If our advanced courses mirrored the school, every bar below would reach this line.</p>
+</div></div></section><section class="slide" data-n="9"><div class="inner"><div class="slide-title">The representation gap</div><div class="gap">
+  <div class="benchmark" style="--bm:69.6%"><span>14.5% &mdash; if it mirrored enrollment</span></div>
+  <div class="bars" data-phase="reveal">
+    <div class="barrow"><span class="blab">Gifted / Talented</span><div class="bar h" style="--w:2.5%"><i>2.5%</i></div></div>
+    <div class="barrow"><span class="blab">Physics</span><div class="bar h" style="--w:3.4%"><i>3.4%</i></div></div>
+    <div class="barrow"><span class="blab">Calculus</span><div class="bar h" style="--w:5.8%"><i>5.8%</i></div></div>
+    <div class="barrow"><span class="blab">SAT / ACT</span><div class="bar h" style="--w:5.8%"><i>5.8%</i></div></div>
+  </div>
+  <p class="gap-foot">White students: <b>66.4%</b> of enrollment &rarr; <b>70&ndash;74%</b> of every advanced seat.</p>
+</div></div></section><section class="slide" data-n="10"><div class="inner"><div class="bigstate">
+  <p class="bs-2">That's not a story about one student.</p>
+  <p class="bs-1big">It's the shape of our school.</p>
+</div></div></section><section class="slide" data-n="11"><div class="inner"><div class="bigstate">
+  <p class="bs-2">And here's what makes it urgent&hellip;</p>
+  <p class="bs-1big">None of it is new.</p>
+  <p class="bs-3">To understand Carmen's appointment, you have to understand a machine we built a century ago.</p>
+</div></div></section><section class="slide" data-n="12"><div class="inner"><div class="slide-title">A century of sorting</div><div class="timeline">
+  <div class="tl-track"></div>
+  <div class="tl-node" style="--x:4%"><span class="dot"></span><b>1902</b><p>Dewey: school structure "controls the whole system"</p></div>
+  <div class="tl-node" style="--x:26%"><span class="dot"></span><b>1900s&ndash;20s</b><p>Administrative progressives: tracking &amp; IQ tests</p></div>
+  <div class="tl-node" style="--x:50%"><span class="dot"></span><b>1910s&ndash;40s</b><p>Arizona builds segregated "Mexican Schools"</p></div>
+  <div class="tl-node" style="--x:73%"><span class="dot"></span><b>1951</b><p><i>Gonzales v. Sheely</i> &mdash; 3 yrs before <i>Brown</i></p></div>
+  <div class="tl-node now" style="--x:95%"><span class="dot"></span><b>Today</b><p>Carmen's counseling appointment</p></div>
+</div></div></section><section class="slide" data-n="13"><div class="inner"><div class="slide-title">The machine</div><div class="machine">
+  <div class="gear">&#9881;</div>
+  <blockquote>They "reconstructed the organization and curriculum of American schools in a form that has <b>lasted to the present day</b>."<cite>&mdash; Labaree (2005), on the administrative progressives</cite></blockquote>
+  <p class="mfoot">Age grades &middot; Carnegie units &middot; testing &middot; tracking &mdash; our pathways are that machine, still running.</p>
+</div></div></section><section class="slide" data-n="14"><div class="inner"><div class="hugequote">
+  <p>&ldquo;Determinism with a<br><span class="hl">smiling face</span>.&rdquo;</p>
+  <cite>David Tyack &mdash; on testing &amp; counseling built to sort children into tracks, sold as democracy</cite>
+</div></div></section><section class="slide" data-n="15"><div class="inner"><div class="slide-title">Then &harr; Now</div><div class="flip" data-flip>
+  <div class="flip-inner">
+    <div class="flip-face front"><span class="era">1920</span><p>&ldquo;Equal education cannot mean the same education.&rdquo;</p><span class="src">a superintendent, saying the quiet part out loud</span></div>
+    <div class="flip-face back"><span class="era">2026</span><p>&ldquo;Now, let's see what community college we can shoot for.&rdquo;</p><span class="src">Carmen's counselor &mdash; same logic, no longer spoken aloud</span></div>
+  </div>
+</div><p class="flip-hint">click to flip &middot; the sentence we stopped saying, the system we kept</p></div></section><section class="slide" data-n="16"><div class="inner"><div class="slide-title">Merit, manufactured</div><div class="machine">
+  <blockquote>Gifted education grew from what Selden calls a &ldquo;racial meritocracy with clear ethnic and class overtones.&rdquo;<cite>&mdash; Selden (2000)</cite></blockquote>
+  <p class="mfoot">The tests were never neutral; they lent old prejudice the authority of science.</p>
+</div></div></section><section class="slide" data-n="17"><div class="inner"><div class="slide-title">Then &harr; Now</div><div class="flip" data-flip>
+  <div class="flip-inner">
+    <div class="flip-face front"><span class="era">Then</span><p>Biased IQ tests channel minority students into &ldquo;nonacademic tracks.&rdquo;</p><span class="src">Tyack (2003), p.&nbsp;85</span></div>
+    <div class="flip-face back"><span class="era">Now</span><p>Our gifted program is <b>2.5%</b> Hispanic &mdash; in a school that is <b>14.5%</b> Hispanic.</p><span class="src">Stevenson HS, Appendix A</span></div>
+  </div>
+</div><p class="flip-hint">click to flip &middot; not a new problem &mdash; an old inheritance</p></div></section><section class="slide" data-n="18"><div class="inner"><div class="slide-title">Language as deficit</div><div class="machine">
+  <blockquote>Over time, &ldquo;blaming language-minority students for their academic failure <b>became fashionable</b>.&rdquo;<cite>&mdash; Ovando (2003), p.&nbsp;6</cite></blockquote>
+  <p class="mfoot">For Latino students, the tell was always language.</p>
+</div></div></section><section class="slide" data-n="19"><div class="inner"><div class="slide-title">Then &harr; Now</div><div class="flip" data-flip>
+  <div class="flip-inner">
+    <div class="flip-face front"><span class="era">Then</span><p>Segregation justified by &ldquo;poor English skills&rdquo; &mdash; a pretext districts <b>never actually tested</b>.</p><span class="src">Powers (2008), p.&nbsp;472</span></div>
+    <div class="flip-face back"><span class="era">Now</span><p>&ldquo;Carmen's parents don't care and can't even speak English.&rdquo;</p><span class="src">a colleague, in our hallway</span></div>
+  </div>
+</div><p class="flip-hint">click to flip &middot; a hundred-year-old script, a modern mouth</p></div></section><section class="slide" data-n="20"><div class="inner"><div class="slide-title">Personal to Arizona</div><div class="az">
+  <div class="az-map">AZ</div>
+  <div class="az-body">
+    <blockquote>Arizona built segregated &ldquo;Mexican Schools&rdquo; on a &ldquo;poor English skills&rdquo; rationale &mdash; a story &ldquo;used to perpetuate white privilege.&rdquo;<cite>&mdash; Powers (2008)</cite></blockquote>
+    <div class="az-win"><b>Gonzales v. Sheely, 1951</b> &mdash; Latino families won in court <b>three years before <i>Brown</i></b>.</div>
+  </div>
+</div></div></section><section class="slide" data-n="21"><div class="inner"><div class="slide-title">It all converges</div><div class="converge">
+  <div class="thread t1">the sorting machine</div>
+  <div class="thread t2">the biased tests</div>
+  <div class="thread t3">the language excuse</div>
+  <div class="cn-center">Carmen's<br>appointment</div>
+</div></div></section><section class="slide" data-n="22"><div class="inner"><div class="bigstate">
+  <p class="bs-2">So &mdash; what are we asking?</p>
+  <p class="bs-3">We don't have a finished plan, and I won't pretend we do. But the evidence points somewhere specific.</p>
+</div></div></section><section class="slide" data-n="23"><div class="inner"><div class="slide-title">Recommendation 1</div><div class="rec">
+  <div class="rec-n">1</div>
+  <div class="rec-body"><div class="rec-icon">&#128202;</div><h2>Audit the pipeline</h2><p>Disaggregate placement, gifted, and advanced-course data by race, language, and feeder school &mdash; find who's sorted toward &ldquo;abstract&rdquo; before the first bell.</p></div>
+</div></div></section><section class="slide" data-n="24"><div class="inner"><div class="slide-title">Recommendation 2</div><div class="rec">
+  <div class="rec-n">2</div>
+  <div class="rec-body"><div class="rec-icon">&#128275;</div><h2>Open the gateway courses</h2><p>Re-examine physics &amp; calculus placement; pilot defaulting qualified students <i>in</i> rather than making them fight their way in.</p></div>
+</div></div></section><section class="slide" data-n="25"><div class="inner"><div class="slide-title">Recommendation 3</div><div class="rec">
+  <div class="rec-n">3</div>
+  <div class="rec-body"><div class="rec-icon">&#129309;</div><h2>Rebuild counseling</h2><p>Opportunity-brokering, not rationing. Add capacity beyond two counselors, and train every advisor to interrupt the default Carmen met.</p></div>
+</div></div></section><section class="slide" data-n="26"><div class="inner"><div class="slide-title">Recommendation 4</div><div class="rec">
+  <div class="rec-n">4</div>
+  <div class="rec-body"><div class="rec-icon">&#127760;</div><h2>Deficit &rarr; asset culture</h2><p>Professional learning that treats a student's bilingualism as the strength it is &mdash; not a problem to be managed.</p></div>
+</div></div></section><section class="slide" data-n="27"><div class="inner"><div class="slide-title">Recommendation 5</div><div class="rec">
+  <div class="rec-n">5</div>
+  <div class="rec-body"><div class="rec-icon">&#127891;</div><h2>Systematic sponsorship</h2><p>What we did informally for Carmen &mdash; a physics mentor &mdash; shouldn't depend on a lucky hallway conversation.</p></div>
+</div></div></section><section class="slide" data-n="28"><div class="inner"><div class="close">
+  <p class="cl-1">In every chapter, the people who changed these structures were never the administrators &mdash; they were the <b>families who refused to accept them</b>.</p>
+  <p class="cl-2">Carmen had the courage to knock. The data say many never will.</p>
+  <p class="cl-3">Let's make sure no child has to be that brave just to get a fair shot.</p>
+  <p class="cl-thanks">Thank you.</p>
+</div></div></section>
+  </div>
+  <div class="controls">
+    <button class="btn" id="prevBtn" title="Previous">&#8249;</button>
+    <button class="btn play" id="playBtn" title="Play / Pause">&#9654;</button>
+    <button class="btn" id="nextBtn" title="Next">&#8250;</button>
+    <span class="counter" id="counter"></span>
+    <div class="prog" id="prog"><i id="progBar"></i></div>
+    <span class="hint">space · ◂ ▸ · click to pause &amp; explore</span>
+  </div>
+</div>
+<div class="start" id="start">
+  <div><h1>Mid-Course Leadership<br>Team Learning Demonstration</h1>
+  <p>Stevenson High School · presented to the Superintendent · ~10 min, narrated</p>
+  <button class="go" id="startGo">&#9654;&nbsp; Begin presentation</button>
+  <div class="meta">A 4-voice leadership-team panel · turn your sound on</div></div>
+</div>
+<script>const SLIDES=[{"spk": "P", "part": "", "title": "", "body": "<div class=\"title-wrap\">\n  <div class=\"crest\">SHS</div>\n  <h1>Stevenson High School</h1>\n  <div class=\"subtitle\">Mid-Course Leadership Team Learning Demonstration</div>\n  <div class=\"present-to\">Presented to the Superintendent</div>\n  <div class=\"byline\">A Leadership Team analysis &amp; proposal</div>\n</div>", "n": 1, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_01.mp3"}, {"spk": "P", "part": "Part 1 \u00b7 What happened", "title": "", "body": "<div class=\"coldopen\">\n  <div class=\"ql\">&ldquo;</div>\n  <p class=\"bigq\">Was she foolish<br>to dream that big?</p>\n  <p class=\"bigq-sub\">A student asked me that in my fourth week. Here's why it should worry us both.</p>\n</div>", "n": 2, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_02.mp3"}, {"spk": "P", "part": "Part 1 \u00b7 What happened", "title": "Where we're going", "body": "<div class=\"road\">\n  <div class=\"road-card\" data-step=\"1\"><div class=\"rn\">1</div><h3>What happened</h3><p>One student. One counseling appointment.</p></div>\n  <div class=\"road-card\" data-step=\"2\"><div class=\"rn\">2</div><h3>Why it's no accident</h3><p>A hundred-year-old structure, still running.</p></div>\n  <div class=\"road-card\" data-step=\"3\"><div class=\"rn\">3</div><h3>What we're asking</h3><p>Five moves, and your partnership.</p></div>\n</div>", "n": 3, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_03.mp3"}, {"spk": "P", "part": "Part 1 \u00b7 What happened", "title": "Meet Carmen", "body": "<div class=\"profile\">\n  <div class=\"avatar\">C</div>\n  <div class=\"pinfo\">\n    <h2>Carmen &middot; <span class=\"muted\">11th grade</span></h2>\n    <div class=\"chips\"><span class=\"chip\">Straight A's</span><span class=\"chip\">Soccer captain</span><span class=\"chip\">Bilingual (ES/EN)</span><span class=\"chip\">Astronomy since <em>Cosmos</em></span></div>\n    <div class=\"goal\"><span class=\"goal-label\">The dream</span> Stanford physics &mdash; the program partnering with NASA</div>\n  </div>\n</div>", "n": 4, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_04.mp3"}, {"spk": "P", "part": "Part 1 \u00b7 What happened", "title": "The appointment", "body": "<div class=\"fork\">\n  <div class=\"fork-start\">Carmen asks her counselor for help</div>\n  <svg viewBox=\"0 0 600 220\" class=\"fork-svg\" preserveAspectRatio=\"xMidYMid meet\">\n    <path class=\"branch branch-down\" d=\"M70,110 C220,110 240,180 530,180\"/>\n    <path class=\"branch branch-up\" d=\"M70,110 C220,110 240,40 530,40\"/>\n    <circle class=\"fork-dot\" cx=\"70\" cy=\"110\" r=\"9\"/>\n  </svg>\n  <div class=\"fork-end up\">Stanford &amp; physics<br><span>(what she wanted)</span></div>\n  <div class=\"fork-end down\">Community college, 2-yr certificate<br><span>(before he opened her file)</span></div>\n</div>", "n": 5, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_05.mp3"}, {"spk": "P", "part": "Part 1 \u00b7 What happened", "title": "", "body": "<div class=\"bigstate\">\n  <p class=\"bs-1\">One counselor having a bad day?</p>\n  <p class=\"bs-2\">I don't believe that's what this is.</p>\n  <p class=\"bs-3\">So I asked my leadership team to look &mdash; at our <b>structure</b>, our <b>culture</b>, and our <b>data</b>.</p>\n</div>", "n": 6, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_06.mp3"}, {"spk": "D", "part": "Part 1 \u00b7 What happened", "title": "Three structural facts", "body": "<div class=\"tiles\">\n  <div class=\"tile\"><div class=\"ticon\">&#9783;</div><h3>Tracked pathways</h3><p>Students sorted into college vs. career paths years before they're ready to choose.</p></div>\n  <div class=\"tile\"><div class=\"big\">2<span>:</span>896</div><h3>Rationed advising</h3><p>Two counselors for nearly 900 students &rarr; fast defaults.</p></div>\n  <div class=\"tile\"><div class=\"ticon\">&#128274;</div><h3>Gateway friction</h3><p>A straight-A student had \"trouble getting placed\" in physics &amp; calculus.</p></div>\n</div>", "n": 7, "spkName": "Dana Whitfield", "spkRole": "AP, Teaching &amp; Learning", "accent": "#4fd1c5", "audio": "audio/PRES_07.mp3"}, {"spk": "D", "part": "Part 1 \u00b7 What happened", "title": "The fingerprint", "body": "<div class=\"gap\">\n  <div class=\"gap-line\"><span class=\"gap-line-label\">Hispanic students = 14.5% of enrollment</span></div>\n  <div class=\"bars\" data-phase=\"enroll\">\n    <div class=\"barrow\"><span class=\"blab\">Enrollment</span><div class=\"bar enroll\" style=\"--w:14.5%\"><i>14.5%</i></div></div>\n  </div>\n  <p class=\"gap-hint\">If our advanced courses mirrored the school, every bar below would reach this line.</p>\n</div>", "n": 8, "spkName": "Dana Whitfield", "spkRole": "AP, Teaching &amp; Learning", "accent": "#4fd1c5", "audio": "audio/PRES_08.mp3"}, {"spk": "D", "part": "Part 1 \u00b7 What happened", "title": "The representation gap", "body": "<div class=\"gap\">\n  <div class=\"benchmark\" style=\"--bm:69.6%\"><span>14.5% &mdash; if it mirrored enrollment</span></div>\n  <div class=\"bars\" data-phase=\"reveal\">\n    <div class=\"barrow\"><span class=\"blab\">Gifted / Talented</span><div class=\"bar h\" style=\"--w:2.5%\"><i>2.5%</i></div></div>\n    <div class=\"barrow\"><span class=\"blab\">Physics</span><div class=\"bar h\" style=\"--w:3.4%\"><i>3.4%</i></div></div>\n    <div class=\"barrow\"><span class=\"blab\">Calculus</span><div class=\"bar h\" style=\"--w:5.8%\"><i>5.8%</i></div></div>\n    <div class=\"barrow\"><span class=\"blab\">SAT / ACT</span><div class=\"bar h\" style=\"--w:5.8%\"><i>5.8%</i></div></div>\n  </div>\n  <p class=\"gap-foot\">White students: <b>66.4%</b> of enrollment &rarr; <b>70&ndash;74%</b> of every advanced seat.</p>\n</div>", "n": 9, "spkName": "Dana Whitfield", "spkRole": "AP, Teaching &amp; Learning", "accent": "#4fd1c5", "audio": "audio/PRES_09.mp3"}, {"spk": "D", "part": "Part 1 \u00b7 What happened", "title": "", "body": "<div class=\"bigstate\">\n  <p class=\"bs-2\">That's not a story about one student.</p>\n  <p class=\"bs-1big\">It's the shape of our school.</p>\n</div>", "n": 10, "spkName": "Dana Whitfield", "spkRole": "AP, Teaching &amp; Learning", "accent": "#4fd1c5", "audio": "audio/PRES_10.mp3"}, {"spk": "P", "part": "Part 2 \u00b7 This has a history", "title": "", "body": "<div class=\"bigstate\">\n  <p class=\"bs-2\">And here's what makes it urgent&hellip;</p>\n  <p class=\"bs-1big\">None of it is new.</p>\n  <p class=\"bs-3\">To understand Carmen's appointment, you have to understand a machine we built a century ago.</p>\n</div>", "n": 11, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_11.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "A century of sorting", "body": "<div class=\"timeline\">\n  <div class=\"tl-track\"></div>\n  <div class=\"tl-node\" style=\"--x:4%\"><span class=\"dot\"></span><b>1902</b><p>Dewey: school structure \"controls the whole system\"</p></div>\n  <div class=\"tl-node\" style=\"--x:26%\"><span class=\"dot\"></span><b>1900s&ndash;20s</b><p>Administrative progressives: tracking &amp; IQ tests</p></div>\n  <div class=\"tl-node\" style=\"--x:50%\"><span class=\"dot\"></span><b>1910s&ndash;40s</b><p>Arizona builds segregated \"Mexican Schools\"</p></div>\n  <div class=\"tl-node\" style=\"--x:73%\"><span class=\"dot\"></span><b>1951</b><p><i>Gonzales v. Sheely</i> &mdash; 3 yrs before <i>Brown</i></p></div>\n  <div class=\"tl-node now\" style=\"--x:95%\"><span class=\"dot\"></span><b>Today</b><p>Carmen's counseling appointment</p></div>\n</div>", "n": 12, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_12.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "The machine", "body": "<div class=\"machine\">\n  <div class=\"gear\">&#9881;</div>\n  <blockquote>They \"reconstructed the organization and curriculum of American schools in a form that has <b>lasted to the present day</b>.\"<cite>&mdash; Labaree (2005), on the administrative progressives</cite></blockquote>\n  <p class=\"mfoot\">Age grades &middot; Carnegie units &middot; testing &middot; tracking &mdash; our pathways are that machine, still running.</p>\n</div>", "n": 13, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_13.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "", "body": "<div class=\"hugequote\">\n  <p>&ldquo;Determinism with a<br><span class=\"hl\">smiling face</span>.&rdquo;</p>\n  <cite>David Tyack &mdash; on testing &amp; counseling built to sort children into tracks, sold as democracy</cite>\n</div>", "n": 14, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_14.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "Then &harr; Now", "body": "<div class=\"flip\" data-flip>\n  <div class=\"flip-inner\">\n    <div class=\"flip-face front\"><span class=\"era\">1920</span><p>&ldquo;Equal education cannot mean the same education.&rdquo;</p><span class=\"src\">a superintendent, saying the quiet part out loud</span></div>\n    <div class=\"flip-face back\"><span class=\"era\">2026</span><p>&ldquo;Now, let's see what community college we can shoot for.&rdquo;</p><span class=\"src\">Carmen's counselor &mdash; same logic, no longer spoken aloud</span></div>\n  </div>\n</div><p class=\"flip-hint\">click to flip &middot; the sentence we stopped saying, the system we kept</p>", "n": 15, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_15.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "Merit, manufactured", "body": "<div class=\"machine\">\n  <blockquote>Gifted education grew from what Selden calls a &ldquo;racial meritocracy with clear ethnic and class overtones.&rdquo;<cite>&mdash; Selden (2000)</cite></blockquote>\n  <p class=\"mfoot\">The tests were never neutral; they lent old prejudice the authority of science.</p>\n</div>", "n": 16, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_16.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "Then &harr; Now", "body": "<div class=\"flip\" data-flip>\n  <div class=\"flip-inner\">\n    <div class=\"flip-face front\"><span class=\"era\">Then</span><p>Biased IQ tests channel minority students into &ldquo;nonacademic tracks.&rdquo;</p><span class=\"src\">Tyack (2003), p.&nbsp;85</span></div>\n    <div class=\"flip-face back\"><span class=\"era\">Now</span><p>Our gifted program is <b>2.5%</b> Hispanic &mdash; in a school that is <b>14.5%</b> Hispanic.</p><span class=\"src\">Stevenson HS, Appendix A</span></div>\n  </div>\n</div><p class=\"flip-hint\">click to flip &middot; not a new problem &mdash; an old inheritance</p>", "n": 17, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_17.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "Language as deficit", "body": "<div class=\"machine\">\n  <blockquote>Over time, &ldquo;blaming language-minority students for their academic failure <b>became fashionable</b>.&rdquo;<cite>&mdash; Ovando (2003), p.&nbsp;6</cite></blockquote>\n  <p class=\"mfoot\">For Latino students, the tell was always language.</p>\n</div>", "n": 18, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_18.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "Then &harr; Now", "body": "<div class=\"flip\" data-flip>\n  <div class=\"flip-inner\">\n    <div class=\"flip-face front\"><span class=\"era\">Then</span><p>Segregation justified by &ldquo;poor English skills&rdquo; &mdash; a pretext districts <b>never actually tested</b>.</p><span class=\"src\">Powers (2008), p.&nbsp;472</span></div>\n    <div class=\"flip-face back\"><span class=\"era\">Now</span><p>&ldquo;Carmen's parents don't care and can't even speak English.&rdquo;</p><span class=\"src\">a colleague, in our hallway</span></div>\n  </div>\n</div><p class=\"flip-hint\">click to flip &middot; a hundred-year-old script, a modern mouth</p>", "n": 19, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_19.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "Personal to Arizona", "body": "<div class=\"az\">\n  <div class=\"az-map\">AZ</div>\n  <div class=\"az-body\">\n    <blockquote>Arizona built segregated &ldquo;Mexican Schools&rdquo; on a &ldquo;poor English skills&rdquo; rationale &mdash; a story &ldquo;used to perpetuate white privilege.&rdquo;<cite>&mdash; Powers (2008)</cite></blockquote>\n    <div class=\"az-win\"><b>Gonzales v. Sheely, 1951</b> &mdash; Latino families won in court <b>three years before <i>Brown</i></b>.</div>\n  </div>\n</div>", "n": 20, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_20.mp3"}, {"spk": "M", "part": "Part 2 \u00b7 This has a history", "title": "It all converges", "body": "<div class=\"converge\">\n  <div class=\"thread t1\">the sorting machine</div>\n  <div class=\"thread t2\">the biased tests</div>\n  <div class=\"thread t3\">the language excuse</div>\n  <div class=\"cn-center\">Carmen's<br>appointment</div>\n</div>", "n": 21, "spkName": "Marcus Bell", "spkRole": "Instructional Coach", "accent": "#b692f6", "audio": "audio/PRES_21.mp3"}, {"spk": "P", "part": "Part 3 \u00b7 What we're asking", "title": "", "body": "<div class=\"bigstate\">\n  <p class=\"bs-2\">So &mdash; what are we asking?</p>\n  <p class=\"bs-3\">We don't have a finished plan, and I won't pretend we do. But the evidence points somewhere specific.</p>\n</div>", "n": 22, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_22.mp3"}, {"spk": "R", "part": "Part 3 \u00b7 What we're asking", "title": "Recommendation 1", "body": "<div class=\"rec\">\n  <div class=\"rec-n\">1</div>\n  <div class=\"rec-body\"><div class=\"rec-icon\">&#128202;</div><h2>Audit the pipeline</h2><p>Disaggregate placement, gifted, and advanced-course data by race, language, and feeder school &mdash; find who's sorted toward &ldquo;abstract&rdquo; before the first bell.</p></div>\n</div>", "n": 23, "spkName": "Rosa Iglesias", "spkRole": "Director of School Counseling", "accent": "#f59ec0", "audio": "audio/PRES_23.mp3"}, {"spk": "R", "part": "Part 3 \u00b7 What we're asking", "title": "Recommendation 2", "body": "<div class=\"rec\">\n  <div class=\"rec-n\">2</div>\n  <div class=\"rec-body\"><div class=\"rec-icon\">&#128275;</div><h2>Open the gateway courses</h2><p>Re-examine physics &amp; calculus placement; pilot defaulting qualified students <i>in</i> rather than making them fight their way in.</p></div>\n</div>", "n": 24, "spkName": "Rosa Iglesias", "spkRole": "Director of School Counseling", "accent": "#f59ec0", "audio": "audio/PRES_24.mp3"}, {"spk": "R", "part": "Part 3 \u00b7 What we're asking", "title": "Recommendation 3", "body": "<div class=\"rec\">\n  <div class=\"rec-n\">3</div>\n  <div class=\"rec-body\"><div class=\"rec-icon\">&#129309;</div><h2>Rebuild counseling</h2><p>Opportunity-brokering, not rationing. Add capacity beyond two counselors, and train every advisor to interrupt the default Carmen met.</p></div>\n</div>", "n": 25, "spkName": "Rosa Iglesias", "spkRole": "Director of School Counseling", "accent": "#f59ec0", "audio": "audio/PRES_25.mp3"}, {"spk": "R", "part": "Part 3 \u00b7 What we're asking", "title": "Recommendation 4", "body": "<div class=\"rec\">\n  <div class=\"rec-n\">4</div>\n  <div class=\"rec-body\"><div class=\"rec-icon\">&#127760;</div><h2>Deficit &rarr; asset culture</h2><p>Professional learning that treats a student's bilingualism as the strength it is &mdash; not a problem to be managed.</p></div>\n</div>", "n": 26, "spkName": "Rosa Iglesias", "spkRole": "Director of School Counseling", "accent": "#f59ec0", "audio": "audio/PRES_26.mp3"}, {"spk": "R", "part": "Part 3 \u00b7 What we're asking", "title": "Recommendation 5", "body": "<div class=\"rec\">\n  <div class=\"rec-n\">5</div>\n  <div class=\"rec-body\"><div class=\"rec-icon\">&#127891;</div><h2>Systematic sponsorship</h2><p>What we did informally for Carmen &mdash; a physics mentor &mdash; shouldn't depend on a lucky hallway conversation.</p></div>\n</div>", "n": 27, "spkName": "Rosa Iglesias", "spkRole": "Director of School Counseling", "accent": "#f59ec0", "audio": "audio/PRES_27.mp3"}, {"spk": "P", "part": "Part 3 \u00b7 What we're asking", "title": "", "body": "<div class=\"close\">\n  <p class=\"cl-1\">In every chapter, the people who changed these structures were never the administrators &mdash; they were the <b>families who refused to accept them</b>.</p>\n  <p class=\"cl-2\">Carmen had the courage to knock. The data say many never will.</p>\n  <p class=\"cl-3\">Let's make sure no child has to be that brave just to get a fair shot.</p>\n  <p class=\"cl-thanks\">Thank you.</p>\n</div>", "n": 28, "spkName": "Colton H. Sharp", "spkRole": "Principal", "accent": "#f5b545", "audio": "audio/PRES_28.mp3"}];
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const av=document.getElementById('av'),spName=document.getElementById('spName'),spRole=document.getElementById('spRole'),
+  speaker=document.getElementById('speaker'),partlab=document.getElementById('partlab'),
+  counter=document.getElementById('counter'),prog=document.getElementById('prog'),progBar=document.getElementById('progBar'),
+  playBtn=document.getElementById('playBtn');
+const audio=new Audio();audio.preload='auto';
+let i=0,playing=false,started=false;
+function setSlide(idx){
+  idx=Math.max(0,Math.min(slides.length-1,idx));
+  slides[i].classList.remove('active','live');
+  i=idx;const s=slides[i];const d=SLIDES[i];
+  document.documentElement.style.setProperty('--accent',d.accent);
+  s.classList.add('active');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>s.classList.add('live')));
+  // speaker card
+  speaker.classList.remove('show');
+  av.textContent=d.spkName[0];spName.textContent=d.spkName;spRole.innerHTML=d.spkRole;
+  requestAnimationFrame(()=>speaker.classList.add('show'));
+  partlab.textContent=d.part||'';
+  counter.textContent=(i+1)+' / '+slides.length;
+  // auto-flip flip-cards shortly after
+  const fc=s.querySelector('.flip');if(fc){fc.classList.remove('flipped');setTimeout(()=>{if(slides[i]===s&&playing)fc.classList.add('flipped');},2600);}
+  audio.src=d.audio;
+  if(playing){audio.play().catch(()=>{});}
+}
+audio.addEventListener('ended',()=>{if(playing){if(i<slides.length-1)setSlide(i+1);else{playing=false;updPlay();}}});
+audio.addEventListener('timeupdate',()=>{const frac=audio.duration?(audio.currentTime/audio.duration):0;
+  progBar.style.width=(((i+frac)/slides.length)*100)+'%';});
+function updPlay(){playBtn.innerHTML=playing?'&#10073;&#10073;':'&#9654;';}
+function play(){if(!started){started=true;document.getElementById('start').style.display='none';}
+  playing=true;updPlay();audio.play().catch(()=>{});}
+function pause(){playing=false;updPlay();audio.pause();}
+function toggle(){playing?pause():play();}
+document.getElementById('playBtn').onclick=toggle;
+document.getElementById('nextBtn').onclick=()=>{setSlide(i+1);};
+document.getElementById('prevBtn').onclick=()=>{setSlide(i-1);};
+document.getElementById('startGo').onclick=()=>{play();setSlide(0);};
+prog.onclick=e=>{const r=prog.getBoundingClientRect();const f=(e.clientX-r.left)/r.width;setSlide(Math.floor(f*slides.length));};
+stage.onclick=e=>{if(e.target.closest('.flip')){const fc=e.target.closest('.flip');fc.classList.toggle('flipped');return;}toggle();};
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'){e.preventDefault();toggle();}
+  else if(e.code==='ArrowRight')setSlide(i+1);
+  else if(e.code==='ArrowLeft')setSlide(i-1);});
+setSlide(0);updPlay();
+</script>
+</body></html>
