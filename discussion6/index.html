@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Module 6 Discussion — The Bottom Line and the Lifeboat — Colton Sharp</title>
+<meta name="author" content="Colton Sharp"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg0:#0a0f1c;--bg1:#13203b;--ink:#eef3fb;--muted:#9fb0c8;--line:rgba(255,255,255,.12);--ac:#3b82f6;--ac2:#22d3ee;--tap:46px}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}
+body{font-family:"Inter",system-ui,sans-serif;color:var(--ink);background:radial-gradient(130% 120% at 50% 0%,var(--bg1),var(--bg0));overflow:hidden}
+#bar{position:fixed;top:0;left:0;height:4px;width:0;z-index:60;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .5s}
+#stage{position:relative;height:100dvh;width:100vw}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+ padding:clamp(28px,7vw,90px) clamp(26px,8vw,140px) calc(126px + env(safe-area-inset-bottom,0px));
+ opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .55s,transform .55s,visibility .55s;max-width:1000px;margin:0 auto}
+.slide.active{opacity:1;visibility:visible;transform:none}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ac2);margin-bottom:16px}
+.eyebrow b{width:9px;height:9px;border-radius:3px;background:var(--ac2);display:inline-block}
+h1{font-family:"Fraunces",serif;font-weight:800;font-size:clamp(30px,5.4vw,60px);line-height:1.04;letter-spacing:-.01em}
+h2{font-family:"Fraunces",serif;font-weight:800;font-size:clamp(26px,4vw,46px);line-height:1.08;letter-spacing:-.01em;margin-bottom:22px}
+.sub{margin-top:16px;color:var(--muted);font-size:clamp(15px,1.6vw,19px)}
+.name{margin-top:22px;color:var(--ac2);font-weight:700;font-size:clamp(17px,2.2vw,24px)}
+.gl{width:88px;height:6px;border-radius:4px;background:linear-gradient(90deg,var(--ac),var(--ac2));margin-top:24px}
+ul{list-style:none;display:flex;flex-direction:column;gap:13px;margin-top:6px}
+li{position:relative;padding-left:30px;font-size:clamp(15px,1.9vw,22px);line-height:1.4}
+li::before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;border-radius:4px;background:var(--ac);box-shadow:0 0 0 4px rgba(59,130,246,.18)}
+li em{font-style:italic;color:#cfe0f5}
+#cap{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(900px,92vw);text-align:center;font-size:clamp(14px,1.6vw,17px);line-height:1.5;color:#e8eefc;background:rgba(7,11,20,.74);backdrop-filter:blur(8px);padding:11px 18px;border-radius:13px;border:1px solid var(--line);opacity:0;transition:.3s;z-index:55;pointer-events:none}
+#cap.show{opacity:1}
+#controls{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:11px;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,rgba(10,15,28,.96),transparent)}
+button.ctl{font-family:"Inter";font-weight:600;font-size:14.5px;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.06);color:#fff;min-height:var(--tap);padding:0 18px;border-radius:12px;transition:.16s;display:inline-flex;align-items:center;gap:7px;-webkit-tap-highlight-color:transparent}
+button.ctl:hover{background:rgba(255,255,255,.15)}button.ctl:active{transform:scale(.97)}button.ctl:disabled{opacity:.34;cursor:not-allowed}
+button.ctl:focus-visible{outline:3px solid color-mix(in srgb,var(--ac) 60%,white);outline-offset:2px}
+#play{background:linear-gradient(135deg,var(--ac),var(--ac2));border-color:transparent;color:#04121f;font-weight:700;padding:0 24px}
+#count{font-size:13px;color:var(--muted);min-width:54px;text-align:center;font-variant-numeric:tabular-nums}
+.note{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:60;font-size:11.5px;letter-spacing:.04em;color:var(--muted);background:rgba(7,11,20,.6);border:1px solid var(--line);padding:5px 12px;border-radius:999px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<div id="bar"></div><div class="note">Review build · browser voice (ColtonHSharp clone pending)</div><div id="stage"></div><div id="cap"></div>
+<div id="controls">
+<button class="ctl" id="prev" aria-label="Previous">&#8249; Back</button>
+<button class="ctl" id="play" aria-label="Play narration">&#9654; Play</button>
+<button class="ctl" id="next" aria-label="Next">Next &#8250;</button>
+<span id="count"></span></div>
+<script>
+// Empty placeholders => player falls back to browser speechSynthesis for review.
+// Swap each "" for a data:audio/mpeg;base64,... string (ColtonHSharp / ElevenLabs) for the final.
+const NARRATION_AUDIO=["","","","",""];
+const SLIDES=[
+{"kind":"title","title":"The Bottom Line — and the Lifeboat","sub":"EDA 505 · Module 6 Discussion · Group B","name":"Colton Sharp","narration":"In the 1980s, the purpose of public school changed. Ronald Reagan attacked what he called the public school monopoly, and A Nation at Risk warned of a rising tide of mediocrity. Almost overnight, the mission shifted — from educating citizens for a democracy to competing in a market."},
+{"kind":"point","eyebrow":"How the purpose shifted","head":"From democracy to the market","bullets":["Reagan recast schools as a “monopoly” to be broken by competition","<em>A Nation at Risk</em> → higher standards “enforced by testing”","Structure: standardized testing, accountability, vouchers, charters","Culture: the “bottom line” — Cuban’s profit “converted into test scores”"],"narration":"That shift reshaped both the structure and the culture of our schools. Structurally, we built standardized testing, accountability systems, vouchers, and charter schools. Culturally, we adopted the bottom line. As Larry Cuban puts it in the video, the corporate profit was simply converted into test scores, and competition became the engine that was supposed to force every school to improve."},
+{"kind":"point","eyebrow":"Still shaping us","head":"I teach inside this reform","bullets":["American Leadership Academy is a charter — the reform the film ends on","Our A–F school letter grade is the “bottom line” made real","Choice, testing, accountability: not history — my Monday","Ravitch: “choice, competition and accountability… are not working”"],"narration":"Are these reforms still shaping schools today? They are the water I swim in. American Leadership Academy, where I teach, is a charter — the very reform the School video ends on. Our A‑through‑F letter grade is that bottom line made real. So when Diane Ravitch, who once championed these reforms, now writes that choice, competition, and accountability are not working, she is describing my Monday, not a history lesson."},
+{"kind":"point","eyebrow":"What I think","head":"We measure schools, not opportunity","bullets":["Choice opened a real door for the families who found ours","But accountability measures outcomes, never who had access","Baker: accountability is “a politically expedient alternative” to equal opportunity","The risk: a “lifeboat” for a few, quiet neglect for the rest"],"narration":"So here’s what I think. Choice did open a real door for the families who found us, and I won’t pretend that’s nothing. But Baker and his colleagues name the deeper problem: accountability became a politically expedient alternative to equalizing opportunity. We measure a school’s scores without asking who was sorted away from the opportunities those scores reflect. The film’s own word for that is the lifeboat — a few rescued, quiet neglect for the rest."},
+{"kind":"close","head":"Keep the promise of choice — without the lifeboat","name":"Colton Sharp","narration":"Is that satisfactory? Not yet. I don’t want to tear down choice or high expectations — I’ve seen them work. But as an aspiring leader, I want to measure opportunity, not just outcomes, and design the access — the master schedule, the placement rules — so the market never quietly decides which children are worth saving. My question for the team: in your setting, what’s one structure you’d change to make excellence and equity the same goal? Thanks — looking forward to your feed‑forward."}
+];
+const stage=document.getElementById("stage");
+SLIDES.forEach(s=>{const d=document.createElement("section");d.className="slide";
+ if(s.kind==="title"){d.innerHTML='<div><span class="eyebrow"><b></b>'+s.sub+'</span><h1>'+s.title+'</h1><div class="name">'+s.name+'</div><div class="gl"></div></div>';}
+ else if(s.kind==="close"){d.innerHTML='<div><h2>'+s.head+'</h2><div class="name">'+s.name+'</div><div class="gl"></div></div>';}
+ else{d.innerHTML='<div><span class="eyebrow"><b></b>'+s.eyebrow+'</span><h2>'+s.head+'</h2><ul>'+s.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul></div>';}
+ stage.appendChild(d);});
+let idx=0,playing=false,audio=null,timer=null;
+const slides=[...document.querySelectorAll(".slide")];
+const bar=document.getElementById("bar"),count=document.getElementById("count"),cap=document.getElementById("cap");
+const prevB=document.getElementById("prev"),nextB=document.getElementById("next"),playB=document.getElementById("play");
+function render(){slides.forEach((s,i)=>s.classList.toggle("active",i===idx));
+ bar.style.width=((idx+1)/slides.length*100)+"%";count.textContent=(idx+1)+" / "+slides.length;
+ cap.textContent=SLIDES[idx].narration;prevB.disabled=idx===0;nextB.disabled=idx===slides.length-1;}
+function go(i){stopA();idx=Math.max(0,Math.min(slides.length-1,i));render();if(playing)speak();}
+function stopA(){if(audio){audio.pause();audio=null;}if(timer){clearTimeout(timer);timer=null;}if(window.speechSynthesis)speechSynthesis.cancel();cap.classList.remove("show");}
+function afterN(){if(playing){if(idx<slides.length-1)go(idx+1);else pause();}}
+function speak(){cap.classList.add("show");const b=NARRATION_AUDIO[idx];if(b){audio=new Audio(b);audio.onended=afterN;audio.play().catch(fb);}else fb();}
+function fb(){const t=cap.textContent;if(window.speechSynthesis){const u=new SpeechSynthesisUtterance(t);u.rate=.97;u.pitch=.92;u.onend=afterN;try{speechSynthesis.speak(u);}catch(e){timer=setTimeout(afterN,5000);}}else{timer=setTimeout(afterN,Math.max(4000,t.split(/\s+/).length/150*60000));}}
+function play(){playing=true;playB.textContent="❚❚ Pause";speak();}
+function pause(){playing=false;playB.textContent="▶ Play";stopA();}
+playB.onclick=()=>playing?pause():play();
+nextB.onclick=()=>{const w=playing;stopA();if(idx<slides.length-1){idx++;render();if(w)speak();}};
+prevB.onclick=()=>{const w=playing;stopA();if(idx>0){idx--;render();if(w)speak();}};
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){e.preventDefault();nextB.click();}if(e.key==="ArrowLeft"){e.preventDefault();prevB.click();}if(e.key===" "){e.preventDefault();playB.click();}});
+let sx=0,sy=0,t0=0;
+stage.addEventListener("touchstart",e=>{const t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;t0=Date.now();},{passive:true});
+stage.addEventListener("touchend",e=>{const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(Date.now()-t0<800&&Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.5){if(dx<0)nextB.click();else prevB.click();}},{passive:true});
+render();
+</script></body></html>
