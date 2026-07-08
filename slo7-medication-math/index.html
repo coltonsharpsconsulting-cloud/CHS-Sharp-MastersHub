@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medication Math — Interactive Lesson</title>
+<style>
+  /* ============================================================
+     Medication Math — accessible interactive Pre-Calc lesson
+     ELL 515 · SLO 7 · Option 1 · Student case: Erra (Gr 11)
+     Self-contained. No network. Read-aloud uses embedded audio
+     when present, else the browser's speech synthesizer.
+     ============================================================ */
+  :root{
+    --paper:#f6f4ef; --card:#ffffff; --ink:#20272e; --ink-soft:#55606b;
+    --line:#e4ded3; --teal:#0f766e; --teal-soft:#d7ede9; --teal-ink:#0b5a54;
+    --amber:#f4c66a; --amber-soft:#fbeecb; --amber-ink:#7a5a12;
+    --good:#1c7c46; --good-soft:#d9f0e2; --warn:#b23a48; --warn-soft:#f7dde0;
+    --shadow:0 1px 2px rgba(20,30,40,.05),0 8px 26px rgba(20,30,40,.07);
+    --r:20px; --r-sm:12px; --maxw:920px; --fs:17px;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#141a1f; --card:#1c242b; --ink:#eef2f4; --ink-soft:#a7b2bc;
+      --line:#2c363f; --teal:#37b3a6; --teal-soft:#153a37; --teal-ink:#8fe0d6;
+      --amber:#e7b65a; --amber-soft:#3a2f14; --amber-ink:#f0d599;
+      --good:#5fd08c; --good-soft:#153726; --warn:#f28a95; --warn-soft:#3a1c20;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35); }
+  }
+  :root[data-theme="dark"]{ --paper:#141a1f; --card:#1c242b; --ink:#eef2f4; --ink-soft:#a7b2bc;
+    --line:#2c363f; --teal:#37b3a6; --teal-soft:#153a37; --teal-ink:#8fe0d6;
+    --amber:#e7b65a; --amber-soft:#3a2f14; --amber-ink:#f0d599;
+    --good:#5fd08c; --good-soft:#153726; --warn:#f28a95; --warn-soft:#3a1c20;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35); }
+  :root[data-theme="light"]{ --paper:#f6f4ef; --card:#ffffff; --ink:#20272e; --ink-soft:#55606b;
+    --line:#e4ded3; --teal:#0f766e; --teal-soft:#d7ede9; --teal-ink:#0b5a54;
+    --amber:#f4c66a; --amber-soft:#fbeecb; --amber-ink:#7a5a12;
+    --good:#1c7c46; --good-soft:#d9f0e2; --warn:#b23a48; --warn-soft:#f7dde0;
+    --shadow:0 1px 2px rgba(20,30,40,.05),0 8px 26px rgba(20,30,40,.07); }
+
+  *{box-sizing:border-box}
+  html{font-size:var(--fs)}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .textsize-lg{--fs:19px} .textsize-xl{--fs:21px}
+
+  /* ---------- top bar ---------- */
+  header.bar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);
+    backdrop-filter:saturate(1.1) blur(8px);border-bottom:1px solid var(--line)}
+  .bar-in{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:14px;
+    padding:12px 20px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:600;
+    font-size:1.12rem;letter-spacing:.2px}
+  .rx{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;
+    background:var(--teal);color:#fff;font-weight:700;font-family:var(--serif);box-shadow:var(--shadow)}
+  .bar-spacer{flex:1}
+  .ctrl{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);
+    background:var(--card);color:var(--ink);border-radius:11px;padding:7px 11px;font-size:.82rem;
+    font-weight:600;cursor:pointer;font-family:var(--sans)}
+  .ctrl:hover{border-color:var(--teal)}
+  .ctrl[aria-pressed="true"]{background:var(--teal-soft);border-color:var(--teal);color:var(--teal-ink)}
+  .switch{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);
+    background:var(--card);border-radius:11px;padding:6px 11px 6px 12px;font-size:.82rem;font-weight:600}
+  .track{width:38px;height:22px;border-radius:99px;background:var(--line);position:relative;transition:.18s}
+  .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.18s}
+  .switch[aria-checked="true"] .track{background:var(--teal)}
+  .switch[aria-checked="true"] .knob{left:18px}
+  .switch:focus-visible,.ctrl:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
+    outline:3px solid var(--amber);outline-offset:2px}
+
+  /* ---------- objective + progress ---------- */
+  .subhead{max-width:var(--maxw);margin:0 auto;padding:16px 20px 4px;display:flex;
+    flex-wrap:wrap;align-items:center;gap:12px 18px}
+  .objective{display:flex;align-items:flex-start;gap:10px;background:var(--teal-soft);
+    color:var(--teal-ink);border:1px solid color-mix(in srgb,var(--teal) 30%,transparent);
+    border-radius:var(--r-sm);padding:10px 14px;font-size:.9rem;flex:1 1 340px;font-weight:500}
+  .objective b{font-weight:700}
+  .dots{display:flex;gap:8px;align-items:center}
+  .dot{width:30px;height:30px;border-radius:10px;border:1px solid var(--line);background:var(--card);
+    color:var(--ink-soft);font-weight:700;font-size:.82rem;display:grid;place-items:center;cursor:pointer}
+  .dot[aria-current="true"]{border-color:var(--teal);background:var(--teal);color:#fff}
+  .dot.done{border-color:var(--good);color:var(--good)}
+  .dot.done[aria-current="true"]{background:var(--good);border-color:var(--good);color:#fff}
+
+  /* ---------- card ---------- */
+  main{max-width:var(--maxw);margin:0 auto;padding:10px 20px 40px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    box-shadow:var(--shadow);padding:26px 26px 22px;margin-top:14px}
+  .eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--teal);margin:0 0 8px}
+  .eyebrow .std{color:var(--ink-soft);font-weight:600}
+  h1.qtitle{font-family:var(--serif);font-weight:600;font-size:1.72rem;line-height:1.15;margin:0 0 14px}
+  .scenario{display:flex;gap:12px;background:color-mix(in srgb,var(--amber-soft) 70%,transparent);
+    border:1px solid color-mix(in srgb,var(--amber) 45%,transparent);border-radius:var(--r-sm);
+    padding:13px 15px;margin:0 0 16px;font-size:.98rem}
+  .scenario .ic{font-size:1.3rem;line-height:1.3}
+  .prompt{font-size:1.06rem;margin:2px 0 4px}
+  .modelbox{display:inline-flex;align-items:center;gap:10px;background:var(--paper);
+    border:1px dashed var(--line);border-radius:var(--r-sm);padding:8px 14px;margin:12px 0;
+    font-family:var(--mono);font-size:1.05rem}
+  .readbtn{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#fff;border:none;
+    border-radius:11px;padding:9px 15px;font-weight:600;font-size:.9rem;cursor:pointer;font-family:var(--sans)}
+  .readbtn:hover{filter:brightness(1.06)} .readbtn.playing{background:var(--warn)}
+  .readbtn[disabled]{opacity:.4;cursor:not-allowed}
+  .read-inline{background:transparent;border:1px solid var(--line);color:var(--teal);width:34px;height:34px;
+    border-radius:9px;cursor:pointer;font-size:1rem;display:inline-grid;place-items:center;vertical-align:middle}
+  .read-inline[disabled]{opacity:.35;cursor:not-allowed}
+
+  /* math bits */
+  sup{font-size:.72em} var{font-style:italic;font-family:var(--serif)}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;
+    margin:0 .12em;line-height:1.05}
+  .frac span:first-child{border-bottom:1.5px solid currentColor;padding:0 .3em}
+
+  /* ---------- answer area ---------- */
+  .answer{margin:18px 0 4px;border-top:1px solid var(--line);padding-top:16px}
+  .answer .label{font-weight:700;font-size:.92rem;margin-bottom:10px;display:flex;
+    align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .modetoggle{font-size:.78rem;font-weight:600;color:var(--teal);background:var(--teal-soft);
+    border:1px solid color-mix(in srgb,var(--teal) 30%,transparent);border-radius:9px;
+    padding:5px 10px;cursor:pointer}
+  .typed{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .typed input{font-size:1.05rem;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;
+    background:var(--paper);color:var(--ink);width:150px;font-family:var(--mono)}
+  .unit{color:var(--ink-soft);font-weight:600}
+  .btn{background:var(--teal);color:#fff;border:none;border-radius:11px;padding:11px 20px;
+    font-weight:700;font-size:.92rem;cursor:pointer;font-family:var(--sans)}
+  .btn:hover{filter:brightness(1.06)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .choices{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+  @media(max-width:520px){.choices{grid-template-columns:1fr}}
+  .choice{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;
+    padding:13px 15px;font-size:1rem;cursor:pointer;color:var(--ink);font-family:var(--sans);
+    display:flex;gap:11px;align-items:center}
+  .choice:hover{border-color:var(--teal)}
+  .choice .k{width:26px;height:26px;border-radius:7px;background:var(--card);border:1px solid var(--line);
+    display:grid;place-items:center;font-weight:700;font-size:.85rem;flex:none}
+  .choice.correct{border-color:var(--good);background:var(--good-soft)}
+  .choice.correct .k{background:var(--good);border-color:var(--good);color:#fff}
+  .choice.wrong{border-color:var(--warn);background:var(--warn-soft)}
+  .choice.wrong .k{background:var(--warn);border-color:var(--warn);color:#fff}
+  .feedback{margin-top:13px;border-radius:12px;padding:12px 15px;font-size:.95rem;display:none;font-weight:500}
+  .feedback.show{display:block}
+  .feedback.ok{background:var(--good-soft);color:var(--good);border:1px solid var(--good)}
+  .feedback.no{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
+
+  /* ---------- supports drawer ---------- */
+  .supports{margin-top:20px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .supports-h{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--paper);
+    font-weight:700;font-size:.92rem}
+  .supports-h .tag{margin-left:auto;font-size:.72rem;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--teal-ink);background:var(--teal-soft);border-radius:7px;padding:3px 8px}
+  .support{border-top:1px solid var(--line)}
+  .support > button{width:100%;display:flex;align-items:center;gap:11px;background:var(--card);border:none;
+    color:var(--ink);padding:13px 16px;font-size:.95rem;font-weight:600;cursor:pointer;text-align:left;font-family:var(--sans)}
+  .support > button:hover{background:var(--paper)}
+  .support .ic{font-size:1.05rem;width:22px;text-align:center}
+  .support .chev{margin-left:auto;transition:.18s;color:var(--ink-soft)}
+  .support[open-panel] .chev{transform:rotate(90deg)}
+  .panel{display:none;padding:2px 18px 18px 49px;font-size:.95rem;color:var(--ink)}
+  .support[open-panel] .panel{display:block}
+  .panel ul{margin:6px 0;padding-left:18px} .panel li{margin:5px 0}
+  .vocab dt{font-weight:700;color:var(--teal-ink);margin-top:9px}
+  .vocab dd{margin:2px 0 0;color:var(--ink-soft)}
+  .frame{background:var(--paper);border:1px dashed var(--line);border-radius:10px;padding:11px 13px;
+    margin:9px 0;font-size:.97rem}
+  .frame .blank{display:inline-block;min-width:52px;border-bottom:2px solid var(--teal);margin:0 3px}
+  .step{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin:9px 0;display:none}
+  .step.show{display:block} .step .n{font-weight:700;color:var(--teal);margin-right:6px}
+  .hint{background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 45%,transparent);
+    border-radius:10px;padding:11px 13px;margin:9px 0;display:none} .hint.show{display:block}
+  .reveal-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .mini{font-size:.82rem;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);
+    border-radius:9px;padding:7px 12px;cursor:pointer}
+  .mini:hover{border-color:var(--teal)}
+  .accom{font-size:.86rem;color:var(--ink-soft);background:var(--paper);border-left:3px solid var(--teal);
+    border-radius:0 8px 8px 0;padding:9px 13px;margin-top:8px}
+  textarea{width:100%;min-height:96px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);
+    color:var(--ink);padding:12px;font-family:var(--sans);font-size:1rem;resize:vertical}
+  .rubric{list-style:none;padding:0;margin:10px 0 0}
+  .rubric li{display:flex;gap:9px;align-items:flex-start;margin:6px 0;font-size:.92rem}
+  .rubric input{margin-top:3px}
+
+  /* ---------- nav ---------- */
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:22px}
+  .nav .count{font-weight:700;color:var(--ink-soft);font-size:.92rem}
+  .nav .btn[disabled]{opacity:.35;cursor:not-allowed;filter:none}
+
+  /* ---------- teacher panel ---------- */
+  .teacher{max-width:var(--maxw);margin:8px auto 60px;padding:0 20px}
+  .teacher details{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+  .teacher summary{cursor:pointer;padding:16px 20px;font-weight:700;font-family:var(--serif);font-size:1.05rem;list-style:none}
+  .teacher summary::-webkit-details-marker{display:none}
+  .teacher summary::before{content:"▸ ";color:var(--teal)}
+  .teacher details[open] summary::before{content:"▾ "}
+  .teacher .body{padding:2px 22px 20px;font-size:.94rem}
+  .teacher table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9rem}
+  .teacher th,.teacher td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  .teacher th{color:var(--teal-ink);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+  .foot{max-width:var(--maxw);margin:0 auto 40px;padding:0 20px;color:var(--ink-soft);font-size:.8rem;text-align:center}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="sr" href="#main">Skip to lesson</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand"><span class="rx" aria-hidden="true">℞</span><span>Medication&nbsp;Math</span></div>
+    <div class="bar-spacer"></div>
+    <button class="ctrl" id="textBtn" aria-label="Change text size" title="Text size">A<span style="font-size:1.2em">A</span></button>
+    <button class="ctrl" id="themeBtn" aria-label="Toggle light or dark" title="Light / dark">◐</button>
+    <div class="switch" id="readSwitch" role="switch" aria-checked="false" tabindex="0"
+         aria-label="Read aloud" title="Turn read-aloud on or off">
+      <span aria-hidden="true">🔊 Read&nbsp;aloud</span><span class="track"><span class="knob"></span></span>
+    </div>
+  </div>
+</header>
+
+<div class="subhead">
+  <div class="objective">
+    <span aria-hidden="true">🎯</span>
+    <span><b>Today's language goal:</b> I can explain how much medicine is left after a number of hours and
+    justify my answer in a complete sentence using <b>half-life</b>, <b>decay factor</b>, and <b>exponent</b>.</span>
+  </div>
+  <nav class="dots" id="dots" aria-label="Problem navigation"></nav>
+</div>
+
+<main id="main"><div id="card"></div>
+  <div class="nav">
+    <button class="btn ghost" id="prev">← Back</button>
+    <span class="count" id="count"></span>
+    <button class="btn" id="next">Next →</button>
+  </div>
+</main>
+
+<section class="teacher">
+  <details>
+    <summary>For teachers — accommodations &amp; ELP alignment (Erra, Gr 11)</summary>
+    <div class="body">
+      <p style="margin:6px 0 2px">Every support below is built as <b>universal design</b>: it serves Erra's English-language
+      development <em>and</em> functions as an IEP/504 accommodation. Same tool, both purposes.</p>
+      <table>
+        <thead><tr><th>Support in the tool</th><th>Serves (EL / Erra)</th><th>Also serves (IEP/504)</th></tr></thead>
+        <tbody>
+          <tr><td>🔊 Read-aloud (teacher's voice)</td><td>Reading-aloud pace; models American English pitch/inflection</td><td>Text-to-speech / oral presentation of material</td></tr>
+          <tr><td>📖 Vocabulary word bank</td><td>ELP Std 5 — academic vocabulary (half-life, decay factor…)</td><td>Pre-taught key terms; reduced vocabulary load</td></tr>
+          <tr><td>🪜 Step-reveal (I-do/we-do/you-do)</td><td>Comprehensible input; chunking of the logarithm step</td><td>Chunked instructions; worked examples</td></tr>
+          <tr><td>✏️ Sentence / solution frames</td><td>ELP Std 4 — construct &amp; justify a claim (leverages her writing strength)</td><td>Response scaffold; sentence starters</td></tr>
+          <tr><td>🧮 Labeled model card</td><td>Visual support for the symbolic model</td><td>Reference sheet / formula provided</td></tr>
+          <tr><td>Choice of typed <em>or</em> multiple-choice answer</td><td>Lowers production/language demand when needed</td><td>Reduced response demand; alternate response mode</td></tr>
+          <tr><td>💡 Tiered hints before the answer</td><td>Lowers affective filter (she gets flustered on the spot)</td><td>Prompting/cueing hierarchy; extra processing time</td></tr>
+          <tr><td>🔤 Text-size · ⏱️ reduced-set note</td><td>Access &amp; pacing</td><td>Enlarged print; shortened assignment option</td></tr>
+        </tbody>
+      </table>
+      <p style="margin:8px 0 0"><b>Content standards:</b> A2.F-LE.A.2, A2.F-LE.B.5, A2.F-IF.C.8, A2.F-LE.A.4 (solve exponential equations with logarithms).
+      <b>ELP standards</b> coded precisely against the ADE ELPS Coding Guidance document in the modified lesson plan.</p>
+    </div>
+  </details>
+</section>
+<p class="foot">Interactive lesson artifact · ELL 515 Structured English Immersion · SLO 7 Option 1 ·
+Read-aloud narration by the instructor (ElevenLabs) with browser-speech fallback.</p>
+
+<script>
+/* =========================================================================
+   DATA — five problems. HTML strings for math keep the file dependency-free.
+   ========================================================================= */
+const HALF = '<span class="frac"><span>1</span><span>2</span></span>';
+const PROBLEMS = [
+{
+  id:1, title:"Half-Life Basics", std:"A2.F-LE.B.5 · interpret an exponential model",
+  scenario:`A patient is given a <b>200 mg</b> dose of medication. The drug has a <b>half-life of 4 hours</b> —
+            every 4 hours, half of what remains leaves the body.`,
+  model:`<var>A</var>(<var>t</var>) = 200 · (${HALF})<sup><var>t</var>/4</sup>`,
+  prompt:`How many milligrams remain after <strong>8 hours</strong>?`,
+  narration:"Problem one. A patient is given a two hundred milligram dose of medication. The drug has a half life of four hours, which means every four hours, half of what remains leaves the body. Here is your question: how many milligrams remain after eight hours?",
+  audioKey:"p1",
+  answer:{value:50, tol:0.5, unit:"mg"},
+  choices:{options:["100 mg","50 mg","25 mg","150 mg"], correct:1},
+  vocab:[["half-life","the time it takes for half of the medicine to leave the body"],
+         ["initial dose","the amount at the start, when the clock reads t = 0 (here, 200 mg)"],
+         ["exponent","the small raised number that tells how many times to multiply — here it counts half-lives"]],
+  modelNote:"200 = starting dose · ½ = we keep half each time · t/4 = number of 4-hour half-lives that have passed",
+  steps:["8 hours ÷ 4 hours per half-life = <b>2 half-lives</b> have passed.",
+         "Halve the dose once: 200 → 100 mg (after 4 h).",
+         "Halve it again: 100 → <b>50 mg</b> (after 8 h). So A(8) = 200·(½)² = 200·¼ = 50 mg.",
+         "Extra: after 12 h that is 3 half-lives → 25 mg."],
+  frames:[`After <span class="blank"></span> hours, <span class="blank"></span> mg remain, because the dose was halved <span class="blank"></span> times.`],
+  hints:["A half-life is the time it takes for the amount to be cut in half.",
+         "8 hours is two half-lives. How many times do you cut 200 in half?",
+         "200 → 100 → 50."]
+},
+{
+  id:2, title:"Reading the Decay Factor", std:"A2.F-IF.C.8 · interpret parameters",
+  scenario:`A different medication starts at <b>120 mg</b>. Each hour, <b>85%</b> of what is present stays in the
+            body (15% is cleared). We write the decay factor as <b>b = 0.85</b>.`,
+  model:`<var>A</var>(<var>t</var>) = 120 · (0.85)<sup><var>t</var></sup>`,
+  prompt:`How many milligrams remain after <strong>3 hours</strong>? (Round to the nearest tenth.)`,
+  narration:"Problem two. A different medication starts at one hundred twenty milligrams. Each hour, eighty five percent of what is present stays in the body, and fifteen percent is cleared. The decay factor b is zero point eight five. How many milligrams remain after three hours? Round to the nearest tenth.",
+  audioKey:"p2",
+  answer:{value:73.7, tol:0.5, unit:"mg"},
+  choices:{options:["73.7 mg","91.8 mg","54.0 mg","102 mg"], correct:0},
+  vocab:[["decay factor","the number you multiply by each period; 0.85 means 85% is kept, 15% is lost"],
+         ["per-hour rate","how fast the amount changes each hour — here, down 15% each hour"]],
+  modelNote:"120 = starting dose · 0.85 = we keep 85% each hour · exponent t = number of hours",
+  steps:["The exponent is the number of hours: t = 3.",
+         "0.85³ = 0.85 · 0.85 · 0.85 ≈ 0.6141.",
+         "Multiply by the start: 120 · 0.6141 ≈ <b>73.7 mg</b>."],
+  frames:[`The decay factor 0.85 means <span class="blank"></span>% of the medicine stays each hour, so after 3 hours about <span class="blank"></span> mg remain.`],
+  hints:["Put the number of hours in as the exponent.",
+         "Find 0.85 to the 3rd power first (≈ 0.614).",
+         "Then multiply that by 120."]
+},
+{
+  id:3, title:"When to Re-Dose (Logarithms)", std:"A2.F-LE.A.4 · solve with logarithms",
+  scenario:`Keep the medication from Problem 2: <var>A</var>(<var>t</var>) = 120 · (0.85)<sup><var>t</var></sup>.
+            A nurse gives the next dose when the amount drops <b>below 50 mg</b>.`,
+  model:`120 · (0.85)<sup><var>t</var></sup> = 50`,
+  prompt:`After how many <strong>hours</strong> does the amount reach 50 mg? (Round to the nearest tenth.)`,
+  narration:"Problem three. This is where logarithms help us. Keep the same medication from problem two. A nurse gives the next dose when the amount drops below fifty milligrams. After how many hours does the amount reach fifty milligrams? Round to the nearest tenth.",
+  audioKey:"p3",
+  answer:{value:5.4, tol:0.2, unit:"hours"},
+  choices:{options:["5.4 hours","3.2 hours","7.8 hours","4.6 hours"], correct:0},
+  vocab:[["logarithm","the tool that 'undoes' an exponent — it answers the question 'what power gives this number?'"],
+         ["isolate","get the power part (0.85 to the t) alone on one side before using a log"]],
+  modelNote:"We know the ending amount (50) and want the exponent t. A logarithm brings a hidden exponent down where we can solve for it.",
+  steps:["Divide both sides by 120:  (0.85)<sup>t</sup> = 50/120 ≈ 0.4167.",
+         "Take the natural log of both sides:  ln(0.85<sup>t</sup>) = ln(0.4167).",
+         "Power rule brings t down:  t · ln(0.85) = ln(0.4167).",
+         "Divide:  t = ln(0.4167) / ln(0.85) ≈ (−0.8755)/(−0.1625) ≈ <b>5.4 hours</b>."],
+  frames:[`To solve for a variable in the exponent, I take the <span class="blank"></span> of both sides. The medicine reaches 50 mg after about <span class="blank"></span> hours.`],
+  hints:["First get 0.85 to the t alone: divide both sides by 120.",
+         "Take a logarithm (ln or log) of both sides — that's how you reach an exponent.",
+         "log(0.85^t) = t·log(0.85), so t = ln(0.4167) ÷ ln(0.85)."]
+},
+{
+  id:4, title:"Comparing Two Medications", std:"A2.F-LE.B.5 · reason from models",
+  scenario:`Two drugs both start at <b>100 mg</b>. <b>Drug A</b> has a 6-hour half-life; <b>Drug B</b> has a
+            3-hour half-life. A dose is "working" while it stays <b>above 25 mg</b> (the therapeutic level).`,
+  model:`A: 100·(${HALF})<sup><var>t</var>/6</sup>   ·   B: 100·(${HALF})<sup><var>t</var>/3</sup>`,
+  prompt:`For how many <strong>hours does Drug A</strong> stay above 25 mg?`,
+  narration:"Problem four. Two drugs both start at one hundred milligrams. Drug A has a six hour half life. Drug B has a three hour half life. A dose is working while it stays above twenty five milligrams, the therapeutic level. For how many hours does Drug A stay above twenty five milligrams?",
+  audioKey:"p4",
+  answer:{value:12, tol:0.1, unit:"hours"},
+  choices:{options:["Drug A — 12 hours","Drug B — 6 hours","Drug A — 6 hours","Both — 9 hours"], correct:0},
+  vocab:[["therapeutic level","the smallest amount that still helps the patient (here, 25 mg)"],
+         ["compare","decide which model stays above the line longer, and by how much"]],
+  modelNote:"25 mg is one quarter of 100 mg. One quarter = ½ · ½ = two half-lives. So just count two half-lives for each drug.",
+  steps:["25 is ¼ of 100. Cutting in half twice gives ¼, so that is <b>2 half-lives</b>.",
+         "Drug A: 2 × 6 h = <b>12 hours</b>.",
+         "Drug B: 2 × 3 h = 6 hours.",
+         "Drug A stays therapeutic twice as long (12 h vs 6 h)."],
+  frames:[`Drug <span class="blank"></span> stays above 25 mg longer, for <span class="blank"></span> hours, because it has the <span class="blank"></span> half-life.`],
+  hints:["25 mg is one quarter of the starting 100 mg.",
+         "One quarter is two half-lives (½ of ½).",
+         "Multiply each drug's half-life by 2."]
+},
+{
+  id:5, title:"Nurse's Decision (Explain It)", std:"A2.F-LE.A.4 + justify in writing",
+  scenario:`A medication has a <b>4-hour half-life</b> and is given as a <b>160 mg</b> dose. The patient needs the
+            level to stay <b>above 40 mg</b> to be safe.`,
+  model:`160 · (${HALF})<sup><var>t</var>/4</sup> = 40`,
+  prompt:`<b>Part A.</b> After how many <strong>hours</strong> does the amount drop to 40 mg?`,
+  narration:"Problem five. Putting it all together. A medication has a four hour half life and is given as a one hundred sixty milligram dose. The patient needs the level to stay above forty milligrams to be safe. Part A: after how many hours does the amount drop to forty milligrams? Then, in Part B, you will explain your advice to the nurse in a complete sentence.",
+  audioKey:"p5",
+  answer:{value:8, tol:0.1, unit:"hours"},
+  choices:{options:["8 hours","4 hours","12 hours","6 hours"], correct:0},
+  vocab:[["justify","give the reason your answer is correct, using evidence from the math"],
+         ["dose interval","how long to wait before the next dose so the level never drops too low"]],
+  modelNote:"40 mg is one quarter of 160 mg → two half-lives → 2 × 4 h.",
+  steps:["40 is ¼ of 160, which is <b>2 half-lives</b>.",
+         "160 → 80 (after 4 h) → 40 (after 8 h).",
+         "So the level hits 40 mg after <b>8 hours</b>: 160·(½)² = 160·¼ = 40."],
+  frames:[`<b>Part B frame:</b> The medicine reaches 40 mg after <span class="blank"></span> hours, so the nurse should give
+           the next dose before <span class="blank"></span> hours, because after that the level drops below what the patient needs.`],
+  hints:["40 mg is one quarter of 160 mg.",
+         "One quarter is two half-lives.",
+         "2 × 4 hours = ?"],
+  written:{
+    prompt:"Part B. In one or two complete sentences, advise the nurse when to give the next dose. Use the sentence frame in ✏️ Frames and the words half-life and dose.",
+    model:"The medicine reaches 40 mg after 8 hours, so the nurse should give the next dose before 8 hours. This keeps the level above 40 mg, because after 8 hours (two half-lives) the dose has dropped to the lowest safe amount.",
+    rubric:["States the time (8 hours) correctly","Gives clear advice (dose before 8 hours)",
+            "Justifies with the math (half-life / dropping below 40 mg)","Written as a complete sentence"]
+  }
+}];
+
+/* Parallel narration audio — filled in Phase 2 with ColtonHSharp MP3s (base64 data URIs).
+   Empty string ⇒ the player falls back to the browser's speech synthesizer. */
+const NARRATION_AUDIO = { p1:"", p2:"", p3:"", p4:"", p5:"" };
+
+/* =========================================================================
+   STATE + PERSISTENCE
+   ========================================================================= */
+const LS = { get:(k,d)=>{try{return JSON.parse(localStorage.getItem("medmath_"+k))??d}catch(e){return d}},
+             set:(k,v)=>{try{localStorage.setItem("medmath_"+k,JSON.stringify(v))}catch(e){}} };
+let idx = 0;
+let readAloud = LS.get("read", false);
+const solved = LS.get("solved", {});
+const root = document.documentElement;
+
+/* theme */
+(function initTheme(){ const t=LS.get("theme",null); if(t) root.setAttribute("data-theme",t); })();
+document.getElementById("themeBtn").onclick = ()=>{
+  const cur = root.getAttribute("data-theme")
+    || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light");
+  const next = cur==="dark"?"light":"dark";
+  root.setAttribute("data-theme",next); LS.set("theme",next);
+};
+/* text size */
+const SIZES=["","textsize-lg","textsize-xl"]; let sizeI=LS.get("size",0);
+function applySize(){ document.body.classList.remove("textsize-lg","textsize-xl");
+  if(SIZES[sizeI]) document.body.classList.add(SIZES[sizeI]); }
+applySize();
+document.getElementById("textBtn").onclick=()=>{ sizeI=(sizeI+1)%SIZES.length; LS.set("size",sizeI); applySize(); };
+
+/* =========================================================================
+   READ-ALOUD  (embedded audio if present, else speechSynthesis)
+   ========================================================================= */
+let curAudio=null, curBtn=null;
+function stopSpeak(){ try{window.speechSynthesis&&speechSynthesis.cancel();}catch(e){}
+  if(curAudio){curAudio.pause();curAudio=null;} if(curBtn){curBtn.classList.remove("playing");curBtn=null;} }
+function pickVoice(){ const vs=(window.speechSynthesis&&speechSynthesis.getVoices())||[];
+  return vs.find(v=>/en[-_]US/i.test(v.lang)&&/female|samantha|zira|jenny/i.test(v.name))
+      || vs.find(v=>/en[-_]US/i.test(v.lang)) || vs.find(v=>/^en/i.test(v.lang)) || null; }
+function speak(text, audioKey, btn){
+  if(!readAloud) return;
+  stopSpeak();
+  if(btn){ btn.classList.add("playing"); curBtn=btn; }
+  const src = audioKey ? NARRATION_AUDIO[audioKey] : "";
+  if(src){ curAudio=new Audio(src); curAudio.onended=stopSpeak; curAudio.onerror=()=>{synth(text);}; curAudio.play().catch(()=>synth(text)); }
+  else synth(text);
+  function synth(t){
+    if(!("speechSynthesis" in window)){ stopSpeak(); return; }
+    const u=new SpeechSynthesisUtterance(t); u.rate=0.92; u.pitch=1.0; u.lang="en-US";
+    const v=pickVoice(); if(v)u.voice=v; u.onend=stopSpeak; speechSynthesis.speak(u);
+  }
+}
+if(window.speechSynthesis){ speechSynthesis.onvoiceschanged=pickVoice; }
+
+const readSwitch=document.getElementById("readSwitch");
+function setRead(on){ readAloud=on; LS.set("read",on); readSwitch.setAttribute("aria-checked",on?"true":"false");
+  if(!on) stopSpeak(); document.querySelectorAll("[data-read]").forEach(b=>b.disabled=!on); }
+readSwitch.onclick=()=>setRead(!readAloud);
+readSwitch.onkeydown=e=>{ if(e.key===" "||e.key==="Enter"){e.preventDefault();setRead(!readAloud);} };
+
+/* =========================================================================
+   RENDER
+   ========================================================================= */
+const cardEl=document.getElementById("card");
+function esc(s){return s;}
+function render(){
+  const p=PROBLEMS[idx];
+  stopSpeak();
+  cardEl.innerHTML = `
+    <article class="card">
+      <p class="eyebrow">Problem ${p.id} of 5 &nbsp;·&nbsp; <span class="std">${p.std}</span></p>
+      <h1 class="qtitle">${p.title}</h1>
+      <div class="scenario"><span class="ic" aria-hidden="true">💊</span><div>${p.scenario}</div></div>
+      <div class="modelbox">${p.model}</div>
+      <p class="prompt">${p.prompt}
+        <button class="read-inline" data-read title="Read this problem aloud" aria-label="Read this problem aloud"
+                ${readAloud?"":"disabled"} id="readMain">🔊</button></p>
+
+      <div class="answer">
+        <div class="label"><span>Your answer</span>
+          <button class="modetoggle" id="modeToggle" aria-label="Switch answer mode">Switch to multiple choice ⇄</button></div>
+        <div id="answerZone"></div>
+        <div class="feedback" id="fb" role="status" aria-live="polite"></div>
+      </div>
+
+      ${p.written?`
+      <div class="answer" style="border-top:1px dashed var(--line)">
+        <div class="label"><span>${p.written.prompt}</span></div>
+        <textarea id="writeBox" placeholder="Write your complete sentence here…"></textarea>
+        <div class="reveal-row">
+          <button class="mini" id="showModel">Show a model answer</button>
+          <button class="read-inline" data-read aria-label="Read the model answer" ${readAloud?"":"disabled"} id="readModel">🔊</button>
+        </div>
+        <div class="hint" id="modelAns">${p.written.model}</div>
+        <ul class="rubric">${p.written.rubric.map(r=>`<li><input type="checkbox"> <span>${r}</span></li>`).join("")}</ul>
+      </div>`:""}
+
+      <div class="supports">
+        <div class="supports-h"><span aria-hidden="true">🧰</span> Supports
+          <span class="tag">use anytime</span></div>
+        ${support("📖","Vocabulary", `<dl class="vocab">${p.vocab.map(v=>`<dt>${v[0]}</dt><dd>${v[1]}</dd>`).join("")}</dl>`)}
+        ${support("🧮","Model card", `<p>${p.model}</p><p class="accom">${p.modelNote}</p>`)}
+        ${support("🪜","Step-by-step (reveal one at a time)",
+            p.steps.map((s,i)=>`<div class="step" id="st${i}"><span class="n">Step ${i+1}.</span>${s}</div>`).join("")
+            +`<div class="reveal-row"><button class="mini" id="nextStep">Reveal next step</button>
+              <button class="mini" id="allSteps">Show all</button></div>`)}
+        ${support("✏️","Sentence &amp; solution frames", p.frames.map(f=>`<div class="frame">${f}</div>`).join(""))}
+        ${support("💡","Hints (peek before the answer)",
+            p.hints.map((h,i)=>`<div class="hint" id="hn${i}">${h}</div>`).join("")
+            +`<div class="reveal-row"><button class="mini" id="nextHint">Give me a hint</button></div>`)}
+        ${support("⏱️","Pacing option",
+            `<p class="accom">You may complete problems 1, 3, and 5 for full credit if you need a shorter set.
+             Take the time you need — there is no timer.</p>`)}
+      </div>
+    </article>`;
+  buildAnswer(p);
+  wireCard(p);
+  renderDots(); updateNav();
+}
+
+function support(ic,label,inner){
+  return `<div class="support"><button class="supbtn"><span class="ic" aria-hidden="true">${ic}</span>
+    <span>${label}</span><span class="chev" aria-hidden="true">›</span></button>
+    <div class="panel">${inner}</div></div>`;
+}
+
+/* answer zone: typed or multiple-choice */
+let mode = "typed";
+function buildAnswer(p){
+  const zone=document.getElementById("answerZone");
+  if(mode==="typed"){
+    zone.innerHTML=`<div class="typed">
+      <input id="numIn" type="text" inputmode="decimal" autocomplete="off"
+             placeholder="?" aria-label="Type your numeric answer">
+      <span class="unit">${p.answer.unit}</span>
+      <button class="btn" id="checkBtn">Check</button></div>`;
+    const inp=document.getElementById("numIn");
+    document.getElementById("checkBtn").onclick=()=>checkTyped(p,inp.value);
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter")checkTyped(p,inp.value);});
+  } else {
+    zone.innerHTML=`<div class="choices" role="group" aria-label="Choose one answer">
+      ${p.choices.options.map((o,i)=>`<button class="choice" data-i="${i}">
+        <span class="k">${"ABCD"[i]}</span><span>${o}</span></button>`).join("")}</div>`;
+    zone.querySelectorAll(".choice").forEach(b=>b.onclick=()=>checkMC(p,+b.dataset.i,b));
+  }
+}
+function markSolved(p){ solved[p.id]=true; LS.set("solved",solved); renderDots(); }
+function fb(kind,msg){ const el=document.getElementById("fb");
+  el.className="feedback show "+(kind==="ok"?"ok":"no"); el.textContent=msg; }
+function checkTyped(p,val){
+  const n=parseFloat(String(val).replace(/[^0-9.\-]/g,""));
+  if(isNaN(n)){ fb("no","Type a number first — then press Check."); return; }
+  if(Math.abs(n-p.answer.value)<=p.answer.tol){ fb("ok","✓ Correct! "+p.answer.value+" "+p.answer.unit+". Nice work."); markSolved(p); }
+  else fb("no","Not yet — try again, or open 💡 Hints or 🪜 Step-by-step for help.");
+}
+function checkMC(p,i,btn){
+  document.querySelectorAll(".choice").forEach(b=>b.classList.remove("wrong"));
+  if(i===p.choices.correct){ btn.classList.add("correct"); fb("ok","✓ Correct! "+p.choices.options[i]); markSolved(p); }
+  else { btn.classList.add("wrong");
+    document.querySelectorAll(".choice")[p.choices.correct];
+    fb("no","Not quite. Try 💡 Hints or 🪜 Step-by-step, then choose again."); }
+}
+
+/* wire up everything inside the current card */
+function wireCard(p){
+  document.getElementById("modeToggle").onclick=()=>{
+    mode = mode==="typed" ? "mc" : "typed";
+    document.getElementById("modeToggle").textContent =
+      mode==="typed" ? "Switch to multiple choice ⇄" : "Switch to typed answer ⇄";
+    buildAnswer(p); document.getElementById("fb").className="feedback";
+  };
+  document.querySelectorAll(".supbtn").forEach(b=>{
+    b.onclick=()=>{ const s=b.parentElement;
+      if(s.hasAttribute("open-panel")) s.removeAttribute("open-panel"); else s.setAttribute("open-panel",""); };
+  });
+  document.getElementById("readMain").onclick=e=>speak(p.narration,p.audioKey,e.currentTarget);
+  // step + hint progressive reveal
+  let sN=0; const nsp=document.getElementById("nextStep");
+  if(nsp){ nsp.onclick=()=>{ const s=document.getElementById("st"+sN); if(s){s.classList.add("show");sN++;}
+      if(sN>=p.steps.length) nsp.disabled=true; };
+    document.getElementById("allSteps").onclick=()=>{ p.steps.forEach((_,i)=>document.getElementById("st"+i).classList.add("show"));
+      sN=p.steps.length; nsp.disabled=true; }; }
+  let hN=0; const nhp=document.getElementById("nextHint");
+  if(nhp){ nhp.onclick=()=>{ const h=document.getElementById("hn"+hN); if(h){h.classList.add("show");hN++;}
+      nhp.textContent = hN>=p.hints.length ? "That's every hint" : "Give me another hint";
+      if(hN>=p.hints.length) nhp.disabled=true; }; }
+  // written part
+  if(p.written){
+    document.getElementById("showModel").onclick=()=>document.getElementById("modelAns").classList.add("show");
+    document.getElementById("readModel").onclick=e=>speak(p.written.model,null,e.currentTarget);
+  }
+}
+
+/* dots + nav */
+const dotsEl=document.getElementById("dots");
+function renderDots(){
+  dotsEl.innerHTML=PROBLEMS.map((p,i)=>`<button class="dot ${solved[p.id]?"done":""}" data-i="${i}"
+     aria-current="${i===idx?"true":"false"}" aria-label="Problem ${p.id}${solved[p.id]?", solved":""}">
+     ${solved[p.id]?"✓":p.id}</button>`).join("");
+  dotsEl.querySelectorAll(".dot").forEach(d=>d.onclick=()=>{idx=+d.dataset.i;mode="typed";render();window.scrollTo({top:0,behavior:"smooth"});});
+}
+function updateNav(){
+  document.getElementById("count").textContent=`Problem ${idx+1} of ${PROBLEMS.length}`;
+  document.getElementById("prev").disabled=idx===0;
+  const nx=document.getElementById("next"); nx.disabled=idx===PROBLEMS.length-1;
+  nx.textContent = idx===PROBLEMS.length-1 ? "Done ✓" : "Next →";
+}
+document.getElementById("prev").onclick=()=>{ if(idx>0){idx--;mode="typed";render();window.scrollTo({top:0,behavior:"smooth"});} };
+document.getElementById("next").onclick=()=>{ if(idx<PROBLEMS.length-1){idx++;mode="typed";render();window.scrollTo({top:0,behavior:"smooth"});} };
+
+/* init */
+setRead(readAloud);
+render();
+</script>
+</body>
+</html>
