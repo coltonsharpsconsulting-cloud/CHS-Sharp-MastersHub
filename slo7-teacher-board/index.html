@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medication Math — Teacher Board (Demonstration)</title>
+<style>
+  /* ============================================================
+     Medication Math — Teacher Board
+     Auto-narrated demonstration of the SLO 7 lesson (Erra, Gr 11).
+     PHASE A: narration via browser speechSynthesis (free). NARRATION_AUDIO
+     slots stay "" until ColtonHSharp clips are embedded after script approval.
+     ============================================================ */
+  :root{
+    --paper:#141a1f; --card:#1c242b; --ink:#eef2f4; --ink-soft:#a7b2bc;
+    --line:#2c363f; --teal:#37b3a6; --teal-soft:#153a37; --teal-ink:#8fe0d6;
+    --amber:#e7b65a; --amber-soft:#3a2f14; --amber-ink:#f0d599;
+    --good:#5fd08c; --good-soft:#153726; --warn:#f28a95; --warn-soft:#3a1c20;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 18px 50px rgba(0,0,0,.45);
+    --r:22px; --r-sm:13px; --maxw:1120px;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:
+      radial-gradient(1200px 700px at 80% -10%, #21303a 0%, transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, #1a2b2a 0%, transparent 55%),
+      var(--paper);
+    color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;overflow:hidden}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+  /* ---------- top chrome ---------- */
+  .top{display:flex;align-items:center;gap:14px;padding:14px 26px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--serif);font-weight:600;font-size:1.05rem}
+  .rx{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--teal);
+    color:#04211e;font-weight:800;font-family:var(--serif)}
+  .badge{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-ink);
+    background:var(--teal-soft);border:1px solid color-mix(in srgb,var(--teal) 30%,transparent);
+    border-radius:8px;padding:4px 9px}
+  .top .sp{flex:1}
+  .counter{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-weight:700;font-size:.85rem}
+  .progress{height:4px;background:var(--line);border-radius:99px;margin:0 26px;overflow:hidden}
+  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--amber));
+    border-radius:99px;transition:width .5s ease}
+
+  /* ---------- stage ---------- */
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding:8px 26px;min-height:0}
+  .slide{width:100%;max-width:var(--maxw);background:var(--card);border:1px solid var(--line);
+    border-radius:var(--r);box-shadow:var(--shadow);padding:34px 40px;max-height:100%;overflow:auto;
+    animation:rise .5s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .eyebrow{font-size:.72rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin:0 0 10px}
+  .slide h1{font-family:var(--serif);font-weight:600;font-size:2.15rem;line-height:1.1;margin:0 0 6px}
+  .slide h2{font-family:var(--serif);font-weight:600;font-size:1.7rem;line-height:1.14;margin:0 0 14px}
+  .lede{font-size:1.12rem;color:var(--ink-soft);max-width:70ch}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+  @media(max-width:820px){.cols{grid-template-columns:1fr}}
+  .panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px 18px}
+  .panel h3{margin:0 0 10px;font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-ink)}
+  .panel.warm h3{color:var(--amber-ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:.92rem}
+  .chip.good{border-color:color-mix(in srgb,var(--good) 45%,transparent);background:var(--good-soft)}
+  .chip.warm{border-color:color-mix(in srgb,var(--amber) 45%,transparent);background:var(--amber-soft)}
+  ul.clean{margin:6px 0 0;padding-left:20px} ul.clean li{margin:7px 0}
+  .big{font-size:1.16rem}
+
+  /* exhibits that mirror the real lesson */
+  sup{font-size:.72em} var{font-style:italic;font-family:var(--serif)}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .12em;line-height:1.05}
+  .frac span:first-child{border-bottom:1.5px solid currentColor;padding:0 .3em}
+  .modelbox{display:inline-flex;align-items:center;gap:10px;background:var(--paper);border:1px dashed var(--line);
+    border-radius:var(--r-sm);padding:10px 16px;margin:4px 0;font-family:var(--mono);font-size:1.15rem}
+  .exhibit{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px 18px;margin-top:4px}
+  .exhibit .tag{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:7px;padding:3px 8px;margin-bottom:10px}
+  .scenario{display:flex;gap:11px;background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);
+    border-radius:var(--r-sm);padding:12px 14px;font-size:.98rem}
+  .suprow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.96rem}
+  .suprow:last-child{border-bottom:none} .suprow .ic{width:24px;text-align:center;font-size:1.05rem}
+  .frame{background:var(--paper);border:1px dashed var(--line);border-radius:10px;padding:11px 13px;font-size:1rem}
+  .frame .blank{display:inline-block;min-width:52px;border-bottom:2px solid var(--teal);margin:0 4px}
+  table.map{width:100%;border-collapse:collapse;font-size:.9rem}
+  table.map th,table.map td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.map th{color:var(--teal-ink);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}
+  .stdcard{display:flex;gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)}
+  .stdcard:last-child{border-bottom:none}
+  .code{font-family:var(--mono);color:var(--teal-ink);font-weight:700;white-space:nowrap}
+
+  /* ---------- captions ---------- */
+  .cc{max-width:var(--maxw);margin:0 auto;width:100%;padding:0 26px}
+  .cc-inner{background:color-mix(in srgb,var(--card) 82%,transparent);border:1px solid var(--line);
+    border-radius:14px;padding:12px 16px;font-size:1.02rem;color:var(--ink);min-height:52px;
+    display:flex;gap:10px;align-items:flex-start}
+  .cc-inner .k{font-size:.66rem;font-weight:800;letter-spacing:.1em;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:6px;padding:3px 6px;margin-top:2px;flex:none}
+  .cc.hidden{display:none}
+
+  /* ---------- controls ---------- */
+  .controls{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 26px 20px}
+  .cbtn{display:inline-grid;place-items:center;min-width:46px;height:46px;padding:0 14px;border-radius:13px;
+    border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:.95rem;
+    cursor:pointer;font-family:var(--sans);gap:7px;grid-auto-flow:column}
+  .cbtn:hover{border-color:var(--teal)}
+  .cbtn.primary{background:var(--teal);color:#04211e;border-color:var(--teal);min-width:120px}
+  .cbtn:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+  /* ---------- start overlay ---------- */
+  .cover{position:fixed;inset:0;z-index:50;display:grid;place-items:center;
+    background:radial-gradient(900px 600px at 50% 30%, #22323d, #10171c 80%)}
+  .cover .box{text-align:center;max-width:620px;padding:30px}
+  .cover .rx{width:64px;height:64px;border-radius:18px;font-size:1.8rem;margin:0 auto 18px}
+  .cover h1{font-family:var(--serif);font-weight:600;font-size:2.6rem;margin:0 0 8px;line-height:1.08}
+  .cover p{color:var(--ink-soft);font-size:1.1rem;margin:0 0 8px}
+  .cover .meta{font-size:.92rem;color:var(--ink-soft);margin:18px 0 26px}
+  .cover .start{font-size:1.1rem;padding:0 26px;height:56px;min-width:0}
+  .cover.hidden{display:none}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<div class="cover" id="cover">
+  <div class="box">
+    <div class="rx" aria-hidden="true">℞</div>
+    <h1>Medication Math</h1>
+    <p>A sheltered Pre-Calculus lesson — demonstrated end to end.</p>
+    <p class="meta">Teaching simulation · Student case: Erra (Grade 11) · ELL 515 SLO 7 · Colton H. Sharp</p>
+    <button class="cbtn primary start" id="startBtn">▶&nbsp; Start the walkthrough</button>
+    <p class="meta" style="margin-top:18px">Plays automatically with narration. Space = play/pause · ← → = move · C = captions</p>
+  </div>
+</div>
+
+<div class="top">
+  <div class="brand"><span class="rx" aria-hidden="true">℞</span> Medication Math
+    <span class="badge">Teacher Board</span></div>
+  <div class="sp"></div>
+  <div class="counter" id="counter">—</div>
+</div>
+<div class="progress"><i id="bar"></i></div>
+
+<div class="stage"><div class="slide" id="slide" aria-live="polite"></div></div>
+
+<div class="cc" id="cc"><div class="cc-inner"><span class="k">NARRATION</span><span id="ccText"></span></div></div>
+
+<div class="controls">
+  <button class="cbtn" id="restart" title="Restart (R)" aria-label="Restart">⟲</button>
+  <button class="cbtn" id="prev" title="Previous (←)" aria-label="Previous">◀</button>
+  <button class="cbtn primary" id="play" aria-label="Play or pause">⏸ Pause</button>
+  <button class="cbtn" id="next" title="Next (→)" aria-label="Next">▶</button>
+  <button class="cbtn" id="ccBtn" title="Toggle captions (C)" aria-pressed="true">CC</button>
+</div>
+
+<script>
+/* ============ math snippet helpers (mirror the lesson) ============ */
+const HALF='<span class="frac"><span>1</span><span>2</span></span>';
+
+/* ============ SLIDES ============ */
+const SLIDES=[
+{ eyebrow:"Teaching Simulation · SLO 7", kind:"title",
+  html:`<h1>Medication Math</h1>
+    <p class="lede">A sheltered Pre-Calculus lesson that gives an emergent bilingual learner full access to
+    grade-level exponential functions while building her academic English.</p>
+    <div class="exhibit" style="margin-top:18px"><span class="tag">What you'll see</span>
+      The student · the dual objective · standards alignment · every sheltered support demonstrated across five problems · assessment · and how it ties together.</div>`,
+  narration:"Welcome. This is a sheltered Pre-Calculus lesson I designed, called Medication Math. I built it for an eleventh-grade emergent bilingual student named Erra. Over the next few minutes I'll walk through the whole lesson and show exactly how each instructional support gives her access to grade-level mathematics while it builds her academic English. Let's start by meeting Erra." },
+
+{ eyebrow:"The Learner", kind:"student",
+  html:`<h2>Meet Erra — assets first</h2>
+    <div class="cols">
+      <div class="panel"><h3>Strengths &amp; assets</h3><div class="chips">
+        <span class="chip good">Trilingual: Nepali · Hindi · English</span>
+        <span class="chip good">Highly motivated</span>
+        <span class="chip good">Strong writer &amp; self-editor</span>
+        <span class="chip good">Constant note-taker</span>
+        <span class="chip good">Builds her own vocab sheets</span>
+        <span class="chip good">Goal: nursing at ASU</span></div></div>
+      <div class="panel warm"><h3>Language needs</h3><div class="chips">
+        <span class="chip warm">Reads aloud fast · skips words</span>
+        <span class="chip warm">Articles: a / an / the</span>
+        <span class="chip warm">Verb tense</span>
+        <span class="chip warm">Academic vs. conversational register</span>
+        <span class="chip warm">American pitch &amp; inflection (learned British English)</span></div></div>
+    </div>
+    <p class="lede" style="margin-top:14px">AZELLA overall <b>Intermediate</b> · every design choice answers a specific need above.</p>`,
+  narration:"Erra moved from Nepal about seven months ago, and I lead with her assets, because they are considerable. She is trilingual in Nepali, Hindi, and English. She is highly motivated, a strong writer who self-edits, and a constant note-taker who builds her own vocabulary sheets. Her goal is to study nursing at Arizona State. Her needs are specific: she reads aloud too quickly and skips words; she drops or adds articles and mixes verb tenses; and because she learned British English, American pitch and inflection are still new. Every choice in this lesson answers one of those needs." },
+
+{ eyebrow:"Design · Objectives", kind:"obj",
+  html:`<h2>Two objectives, carried at once</h2>
+    <div class="cols">
+      <div class="panel"><h3>Content objective</h3><p class="big">Model how medication leaves the body using
+        <b>exponential decay</b> and <b>logarithms</b> — evaluate, interpret, and solve.</p></div>
+      <div class="panel"><h3>Language objective</h3><p class="big">“I can explain how much medicine remains after a
+        given time and <b>justify</b> it in a complete sentence using <b>half-life, decay factor,</b> and <b>exponent</b>.”</p></div>
+    </div>
+    <p class="lede" style="margin-top:14px">Naming the language objective makes the hidden language demand of the math visible and teachable.</p>`,
+  narration:"The lesson carries two objectives at once. The content objective is exponential decay and logarithms — modeling how medicine leaves the body. The language objective is that Erra can explain how much medicine remains after a given time, and justify her answer in a complete sentence, using the academic terms half-life, decay factor, and exponent. For an emergent bilingual, naming the language objective is not optional. It makes the hidden language demand of the mathematics visible, and therefore teachable." },
+
+{ eyebrow:"Design · Asset-Based", kind:"context",
+  html:`<h2>Why medicine? Because it's hers.</h2>
+    <div class="exhibit"><span class="tag">Funds of knowledge</span>
+      <div class="big">Erra's goal — <b>nursing</b> — becomes the context for every problem: dosage, half-life, when to re-dose.</div></div>
+    <ul class="clean big">
+      <li>Exponential functions live inside a context she chose for her own future.</li>
+      <li>Her aspiration is treated as <b>intellectual capital</b>, not decoration.</li>
+      <li>She is doing the math of her own goal — not someone else's word problems.</li>
+    </ul>`,
+  narration:"I framed the entire lesson around medicine in the bloodstream on purpose. Erra wants to be a nurse. By anchoring exponential functions in dosage and half-life, the mathematics sits inside a context she has chosen for her own future. This is asset-based, funds-of-knowledge design: her aspiration becomes intellectual capital, not a decoration. She is not learning someone else's word problems — she is doing the math of her own goal." },
+
+{ eyebrow:"Alignment · Standards", kind:"standards",
+  html:`<h2>Standards alignment</h2>
+    <div class="panel" style="margin-bottom:14px"><h3>Content standards (AZ HS Math)</h3>
+      <div class="stdcard"><span class="code">A2.F-LE.A.2 / B.5</span><span>Construct &amp; interpret exponential models</span></div>
+      <div class="stdcard"><span class="code">A2.F-IF.C.8</span><span>Classify &amp; interpret growth/decay</span></div>
+      <div class="stdcard"><span class="code">A2.F-LE.A.4</span><span>Solve exponential equations with logarithms</span></div></div>
+    <div class="panel"><h3>ELP standards — Erra at Intermediate</h3>
+      <div class="stdcard"><span class="code">EL.9-12.S2.I</span><span>Construct meaning from the word problems (reading)</span></div>
+      <div class="stdcard"><span class="code">EL.9-12.S5.I</span><span>Determine the meaning of academic vocabulary</span></div>
+      <div class="stdcard"><span class="code">EL.9-12.S4.I</span><span>Construct &amp; support a written claim (justify)</span></div></div>`,
+  narration:"Here is the standards alignment. The content standards are Arizona's exponential-model standards, including solving exponential equations with logarithms. On the language side, Erra is at the Intermediate proficiency level, so I aligned three English Language Proficiency standards: Standard 2, for constructing meaning from the word problems; Standard 5, for the academic vocabulary; and Standard 4, for constructing and justifying a written claim. The same content standard can demand very different language depending on the learner, and coding it this way keeps my support precise and defensible." },
+
+{ eyebrow:"Design · Sheltered Instruction", kind:"supports",
+  html:`<h2>One support stack, on every problem</h2>
+    <div class="exhibit"><span class="tag">Each is a deliberate sheltered move</span>
+      <div class="suprow"><span class="ic">🔊</span><b>Read-aloud</b> — comprehensible input in the teacher's voice</div>
+      <div class="suprow"><span class="ic">📖</span><b>Vocabulary bank</b> — pre-teach academic terms</div>
+      <div class="suprow"><span class="ic">🧮</span><b>Labeled model card</b> — visual anchor for the symbols</div>
+      <div class="suprow"><span class="ic">🪜</span><b>Step-by-step reveal</b> — chunk the reasoning, think aloud</div>
+      <div class="suprow"><span class="ic">✏️</span><b>Sentence frames</b> — scaffold production</div>
+      <div class="suprow"><span class="ic">💡</span><b>Tiered hints</b> — lower the risk before the answer</div>
+      <div class="suprow"><span class="ic">⇄</span><b>Typed or multiple-choice</b> — choice of response mode</div></div>`,
+  narration:"Every problem carries the same set of supports, and each one is a deliberate sheltered-instruction move. Read-aloud makes the input comprehensible. A vocabulary bank pre-teaches the academic terms. A labeled model card gives a visual anchor. Step-by-step reveal chunks the reasoning. Sentence frames scaffold production. Tiered hints lower the risk. And the student can answer by typing or by multiple choice. Let me show you these in action across the five problems." },
+
+{ eyebrow:"Problem 1 of 5 · Demonstration", kind:"p1",
+  html:`<h2>Half-life — the visual model &amp; read-aloud</h2>
+    <div class="scenario"><span aria-hidden="true">💊</span><div>A patient gets a <b>200 mg</b> dose; half-life <b>4 hours</b>. How much remains after 8 hours?</div></div>
+    <div class="modelbox"><var>A</var>(<var>t</var>) = 200 · (${HALF})<sup><var>t</var>/4</sup></div>
+    <p class="lede">Model card labels every part: <b>200</b> = starting dose · <b>½</b> = kept each cycle · <b>t/4</b> = number of half-lives.
+    As if Erra were here, I turn on <b>read-aloud in my voice</b> so she hears it at a steady pace, in American English.</p>`,
+  narration:"Problem one introduces the model, with a two-hundred-milligram dose and a four-hour half-life. Notice the labeled model card: two hundred is the starting dose, one-half is what we keep each cycle, and the exponent counts half-lives. As if Erra were here, I would turn on read-aloud in my own voice, so she hears the problem at a steady pace and in American English — instead of racing through it and skipping words, the way she does when she reads aloud alone." },
+
+{ eyebrow:"Problem 2 of 5 · Demonstration", kind:"p2",
+  html:`<h2>Decay factor — pre-teaching vocabulary</h2>
+    <div class="modelbox"><var>A</var>(<var>t</var>) = 120 · (0.85)<sup><var>t</var></sup></div>
+    <div class="exhibit"><span class="tag">📖 Vocabulary support</span>
+      <p style="margin:0"><b>decay factor</b> — the fraction of medicine we <i>keep</i> each hour. Here 0.85 means 85% stays, 15% is cleared.</p></div>
+    <p class="lede">The arithmetic is easy for Erra — it's the <b>term “decay factor”</b> that carries the language load, so I pre-teach it before she computes.</p>`,
+  narration:"Problem two shifts to a decay factor of zero point eight five. This is where the academic vocabulary matters. Before she computes, Erra opens the vocabulary support: decay factor means the fraction we keep each hour. I pre-teach that term with a plain-language definition, because the arithmetic here is easy for her. It is the phrase decay factor that carries the language load — not the multiplication." },
+
+{ eyebrow:"Problem 3 of 5 · Demonstration", kind:"p3",
+  html:`<h2>Logarithms — step-reveal think-aloud</h2>
+    <div class="modelbox">120 · (0.85)<sup><var>t</var></sup> = 50</div>
+    <div class="exhibit"><span class="tag">🪜 Step-by-step reveal — one step at a time</span>
+      <ul class="clean" style="margin:0">
+        <li>Isolate the power: 0.85<sup>t</sup> = 50/120</li>
+        <li>Take the natural log of both sides</li>
+        <li>Power rule brings <var>t</var> down</li>
+        <li>Divide → <var>t</var> ≈ 5.4 hours</li></ul></div>
+    <p class="lede">The hardest step in the lesson — so it is chunked, and <b>my voice walks through each move</b> as it appears.</p>`,
+  narration:"Problem three is the conceptual pivot: solving for a variable in the exponent, using a logarithm. This is the hardest step, so I demonstrate it with step-by-step reveal. Each step appears one at a time, and my voice walks through the move — isolate the power, take the natural log of both sides, use the power rule to bring the exponent down, then divide. Chunking a hard procedure and thinking aloud through it is exactly what sheltered instruction calls for." },
+
+{ eyebrow:"Problem 4 of 5 · Demonstration", kind:"p4",
+  html:`<h2>Compare two medications — reasoning</h2>
+    <div class="cols">
+      <div class="panel"><h3>Drug A</h3><div class="modelbox" style="font-size:1rem">100·(${HALF})<sup><var>t</var>/6</sup></div><p>6-hr half-life → stays ≥ 25 mg for <b>12 h</b></p></div>
+      <div class="panel"><h3>Drug B</h3><div class="modelbox" style="font-size:1rem">100·(${HALF})<sup><var>t</var>/3</sup></div><p>3-hr half-life → stays ≥ 25 mg for <b>6 h</b></p></div>
+    </div>
+    <p class="lede" style="margin-top:12px">Numbers are clean on purpose (25 = ¼ = two half-lives) so her energy goes to the <b>reasoning</b>, not the computation. Access ≠ lower rigor.</p>`,
+  narration:"Problem four asks Erra to compare two medications with different half-lives, and reason about which one stays effective longer. The numbers are clean on purpose — twenty-five is one quarter, which is two half-lives — so her cognitive energy goes to the reasoning and the comparison language, not to messy computation. Access does not mean lowering the rigor; it means removing the barriers around it." },
+
+{ eyebrow:"Problem 5 of 5 · Demonstration", kind:"p5",
+  html:`<h2>Write &amp; justify — her strength, scaffolded</h2>
+    <div class="scenario"><span aria-hidden="true">💊</span><div>160 mg dose, 4-hr half-life, must stay above 40 mg. Advise the nurse when to re-dose.</div></div>
+    <div class="exhibit"><span class="tag">✏️ Sentence frame</span>
+      <div class="frame">The medicine reaches 40 mg after <span class="blank"></span> hours, so the nurse should give the next dose before
+      <span class="blank"></span> hours, because after that the level drops below what the patient needs.</div></div>
+    <p class="lede">The frame supplies the academic structure; Erra pours her <b>strong writing</b> into it and meets the language objective.</p>`,
+  narration:"Problem five is the payoff, and it plays directly to Erra's strength. She advises a nurse on when to give the next dose, and she writes her justification in a complete sentence using a sentence frame I provide. The frame gives her the academic structure, so she can pour her strong writing into it, and meet the language objective — constructing and supporting a claim in writing — with the moderate support her level calls for." },
+
+{ eyebrow:"Design · The Voice", kind:"voice",
+  html:`<h2>Read-aloud in my voice — doing double duty</h2>
+    <div class="exhibit"><span class="tag">🔊 Toggleable · every problem &amp; every step</span>
+      <table class="map"><tr><th>For Erra (EL)</th><th>For everyone (UDL)</th></tr>
+        <tr><td>Models American pitch &amp; inflection she's learning</td><td>Optional text-to-speech accommodation</td></tr>
+        <tr><td>Sets a following pace vs. racing ahead</td><td>Any student who benefits can turn it on</td></tr></table></div>`,
+  narration:"A word on the read-aloud, because it does double duty. Every problem, and every solution step, can be read aloud in my recorded voice. For Erra, that models the American pitch and inflection she is still learning, and it sets a reading pace she can follow, instead of racing ahead. And because it is optional and toggleable, it is also universal design: any student who benefits can turn it on, and it functions as a text-to-speech accommodation." },
+
+{ eyebrow:"Design · Universal Design", kind:"udl",
+  html:`<h2>Built once, serves twice</h2>
+    <div class="exhibit"><table class="map">
+      <tr><th>Support</th><th>Serves Erra (EL)</th><th>Also an IEP / 504 accommodation</th></tr>
+      <tr><td>Vocabulary bank</td><td>Academic vocabulary (ELP S5)</td><td>Pre-taught key terms</td></tr>
+      <tr><td>Step-by-step reveal</td><td>Comprehensible, chunked reasoning</td><td>Chunked instructions / worked examples</td></tr>
+      <tr><td>Sentence frames</td><td>Construct &amp; justify a claim (ELP S4)</td><td>Response scaffold</td></tr>
+      <tr><td>Typed or multiple-choice</td><td>Lowers production demand</td><td>Alternate / reduced response mode</td></tr>
+      <tr><td>Tiered hints · text size · shorter set</td><td>Lowers affective filter; access</td><td>Cueing hierarchy; enlarged print; shortened task</td></tr>
+    </table></div>`,
+  narration:"That leads to a design principle running through the whole lesson: every support is built once and serves twice. The vocabulary bank, the chunked steps, the sentence frames, the tiered hints, the choice between typed and multiple-choice answers, adjustable text size, and a shorter problem-set option — each of these supports Erra's language development, and each is simultaneously a standard accommodation for a student on an I-E-P or a five-oh-four. Same tool, both purposes." },
+
+{ eyebrow:"Design · Assessment", kind:"assess",
+  html:`<h2>Accessible, honest checks</h2>
+    <div class="cols">
+      <div class="panel"><h3>How she shows it</h3><ul class="clean"><li>Type a numeric answer</li><li>Choose from options</li><li>Reveal the worked solution to self-check</li></ul></div>
+      <div class="panel"><h3>The written justification</h3><ul class="clean"><li>Short rubric: claim · reasoning · target vocabulary</li><li>Scores the math &amp; the language — <b>not</b> in-progress grammar or accent</li></ul></div>
+    </div>`,
+  narration:"Assessment stays accessible and honest. Erra can demonstrate understanding by typing an answer, choosing from options, or revealing the worked solution to self-check. Her written justification is scored on a short rubric that looks at the claim, the reasoning, and whether she uses the target vocabulary — not at her in-progress grammar. The assessment measures the mathematics and the target language, not the accent or the article errors." },
+
+{ eyebrow:"Tying It Together", kind:"close",
+  html:`<h2>Rigor held constant. Access changed.</h2>
+    <div class="cols">
+      <div class="panel"><h3>Held constant</h3><p class="big">Grade-level exponential functions &amp; logarithms. The mathematics never drops.</p></div>
+      <div class="panel"><h3>What changed</h3><p class="big">Comprehensible input · pre-taught vocabulary · chunked reasoning · sentence frames · a voice she can follow — inside a nursing context that's hers.</p></div>
+    </div>
+    <p class="lede big" style="margin-top:14px">That's the equity move I want to model as an instructional leader: rigorous mathematics, held fully open to an emergent bilingual learner. <b>Thank you.</b></p>`,
+  narration:"So here is how it ties together. The grade-level rigor never drops. What changes is access: comprehensible input, pre-taught academic vocabulary, chunked reasoning, sentence frames, and a read-aloud in a voice she can follow — all anchored in a nursing context that belongs to her. That is the equity move I want to model as an instructional leader: rigorous mathematics, held fully open to an emergent bilingual learner. Thank you for watching Medication Math." }
+];
+
+/* Parallel narration audio — ColtonHSharp MP3s (base64) go here after script approval.
+   All "" for Phase A ⇒ browser speechSynthesis. */
+const NARRATION_AUDIO = new Array(SLIDES.length).fill("");
+
+/* ============ engine ============ */
+const slideEl=document.getElementById("slide"), ccEl=document.getElementById("cc"),
+      ccText=document.getElementById("ccText"), bar=document.getElementById("bar"),
+      counter=document.getElementById("counter"), playBtn=document.getElementById("play");
+let idx=0, playing=false, token=0, curAudio=null, captions=true;
+
+function pickVoice(){ const vs=(window.speechSynthesis&&speechSynthesis.getVoices())||[];
+  return vs.find(v=>/en[-_]US/i.test(v.lang)&&/(male|guy|eric|aaron|tom|daniel)/i.test(v.name))
+      || vs.find(v=>/en[-_]US/i.test(v.lang)) || vs.find(v=>/^en/i.test(v.lang)) || null; }
+if(window.speechSynthesis) speechSynthesis.onvoiceschanged=pickVoice;
+
+function stopAudio(){ token++; try{speechSynthesis&&speechSynthesis.cancel();}catch(e){}
+  if(curAudio){curAudio.onended=null;curAudio.pause();curAudio=null;} }
+
+function render(){
+  const s=SLIDES[idx];
+  slideEl.innerHTML=`<p class="eyebrow">${s.eyebrow}</p>${s.html}`;
+  slideEl.scrollTop=0;
+  ccText.textContent=s.narration;
+  counter.textContent=`${idx+1} / ${SLIDES.length}`;
+  bar.style.width=((idx+1)/SLIDES.length*100)+"%";
+}
+function narrate(cb){
+  stopAudio(); const my=token; const s=SLIDES[idx];
+  let fired=false;
+  const done=()=>{ if(fired||my!==token) return; fired=true; cb&&cb(); };   // run once, ignore stale
+  const words=(s.narration.match(/\S+/g)||[]).length;
+  const src=NARRATION_AUDIO[idx];
+  if(src){ curAudio=new Audio(src); curAudio.onended=done; curAudio.onerror=synth; curAudio.play().catch(synth); }
+  else synth();
+  function synth(){
+    if(!("speechSynthesis" in window)){ setTimeout(done, words*430); return; }  // no TTS: pace by length
+    const u=new SpeechSynthesisUtterance(s.narration); u.rate=1.0; u.pitch=1.0; u.lang="en-US";
+    const v=pickVoice(); if(v)u.voice=v; u.onend=done;
+    try{ speechSynthesis.speak(u); }catch(e){ setTimeout(done, words*430); return; }
+    setTimeout(done, words*480+6000);   // backstop: advance even if onend never fires
+  }
+}
+function setPlayBtn(){ playBtn.innerHTML = playing ? "⏸ Pause" : (idx===SLIDES.length-1 ? "⟲ Replay" : "▶ Play"); }
+function playFrom(i){ playing=true; idx=Math.max(0,Math.min(i,SLIDES.length-1)); render(); setPlayBtn();
+  narrate(()=>{ if(playing && idx<SLIDES.length-1){ setTimeout(()=>{ if(playing) playFrom(idx+1); }, 600); }
+               else { playing=false; setPlayBtn(); } }); }
+function pause(){ playing=false; stopAudio(); setPlayBtn(); }
+function goto(i){ pause(); idx=Math.max(0,Math.min(i,SLIDES.length-1)); render(); setPlayBtn(); }
+
+playBtn.onclick=()=>{ if(playing) pause(); else { if(idx===SLIDES.length-1 && !playing){ playFrom(0); } else playFrom(idx); } };
+document.getElementById("next").onclick=()=>goto(idx+1);
+document.getElementById("prev").onclick=()=>goto(idx-1);
+document.getElementById("restart").onclick=()=>playFrom(0);
+document.getElementById("ccBtn").onclick=()=>{ captions=!captions; ccEl.classList.toggle("hidden",!captions);
+  document.getElementById("ccBtn").setAttribute("aria-pressed",captions?"true":"false"); };
+
+document.addEventListener("keydown",e=>{
+  if(e.key===" "){e.preventDefault();playBtn.click();}
+  else if(e.key==="ArrowRight")goto(idx+1);
+  else if(e.key==="ArrowLeft")goto(idx-1);
+  else if(e.key.toLowerCase()==="r")playFrom(0);
+  else if(e.key.toLowerCase()==="c")document.getElementById("ccBtn").click();
+});
+
+/* start */
+document.getElementById("startBtn").onclick=()=>{
+  document.getElementById("cover").classList.add("hidden");
+  playFrom(0);
+};
+render(); /* show slide 1 behind the cover */
+</script>
+</body>
+</html>
